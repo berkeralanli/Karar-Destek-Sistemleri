@@ -1,5 +1,5 @@
 import DashboardBox from '@/components/DashboardBox';
-import  useGetKpisQuery  from "@/sta";
+import  { useGetKpisQuery } from '@/state/api';
 import React from 'react';
 
 type Props = {}
