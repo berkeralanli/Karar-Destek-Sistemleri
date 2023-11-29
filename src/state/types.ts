@@ -10,3 +10,18 @@ export interface GetKpisResponse{
   __v: number;
   InvoiceDate: string;
 }
+
+
+export interface getMostSellers2022Response{
+  __id: string;
+  TotalQuantity: number;
+  totalRevenue: number;
+  Description: string;
+}
+
+export interface GetMostSellers2023Response{
+  __id: string;
+  TotalQuantity: number;
+  totalRevenue: number;
+  Description: string;
+}
