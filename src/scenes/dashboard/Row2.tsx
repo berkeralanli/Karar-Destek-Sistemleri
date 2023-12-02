@@ -32,7 +32,8 @@ const Row2 = () => {
     if (monthlyData) {
       return monthlyData.map((item) => ({
         month: getMonthName(item.month).substring(0, 3),
-        Gelir: item.totalRevenue,
+        ToplamGelir: item.totalRevenue,
+        ToplamAdet: item.totalQuantity.toLocaleString("tr-TR"),
       }));
     }
     return [];
@@ -69,7 +70,7 @@ const Row2 = () => {
           <XAxis dataKey="month" axisLine={false} tickLine={false} style={{ fontSize: "10px"}}/>
           <YAxis  axisLine={false} tickLine={false} style={{ fontSize: "10px"}} />
           <Tooltip />
-          <Bar dataKey="Gelir" fill="url(#colorRevenue)" />
+          <Bar dataKey="ToplamGelir" fill="url(#colorRevenue)" />
         </BarChart>
       </ResponsiveContainer>
     </DashboardBox>
@@ -77,8 +78,8 @@ const Row2 = () => {
     
     <DashboardBox gridArea="e">
     <BoxHeader
-    title='Gelecek Yılın' 
-    subtitle='Beklenen büyüme değeri ile gösterimi' 
+    title='Yılı  ' 
+    subtitle='Toplam gelir ve Toplam adetin gösterimi' 
     sideText='0.24%'/>
     <ResponsiveContainer width="100%" height="80%">
       
@@ -113,19 +114,19 @@ const Row2 = () => {
           />
           
           <Tooltip />
-          <Legend height={20} wrapperStyle={{
+          <Legend height={10} wrapperStyle={{
             margin: '0 0 10px 0 '
           }}/>
 
           <Line 
           yAxisId="left"
           type="monotone"
-          dataKey="Gelir"
+          dataKey="ToplamGelir"
           stroke={palette.tertiary[500]}/>
           <Line 
           yAxisId="right"
           type="monotone"
-          dataKey="Gelir"
+          dataKey="ToplamAdet"
           stroke={palette.primary.main}/>
         </LineChart>
       </ResponsiveContainer>
