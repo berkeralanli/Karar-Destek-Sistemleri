@@ -25,3 +25,13 @@ export interface GetMostSellers2023Response{
   totalRevenue: number;
   Description: string;
 }
+
+export interface GetMonthlyProfit2022Response{
+  TotalQuantity: number;
+  totalRevenue: number;
+  Description: string;
+}
+export interface GetMonthlyProfit2023Response{
+  month: number;
+  totalRevenue: number;
+}

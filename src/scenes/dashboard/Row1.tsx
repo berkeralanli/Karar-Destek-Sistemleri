@@ -1,13 +1,23 @@
-import BoxHeader from '@/components/BoxHeader';
 import DashboardBox from '@/components/DashboardBox';
+import Boxheader from '@/components/BoxHeader';
 import  { useGetMostSellers2022Query, useGetMostSellers2023Query } from '@/state/api';
-import { useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { useMemo } from 'react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import FlexBetween from '@/components/FlexBetween';
+import BoxHeader from '@/components/BoxHeader';
+
+const pieData = [
+  {name: "Group A", value: 700},
+  {name: "Group B", value: 300},
+ 
+  
+]
 type Props = {}
 
-const Row1 = (props: Props) => {
+const Row1 = () => {
   const { palette } = useTheme();
+  const pieColors = [palette.primary[800], palette.primary[600]];
   const { data: data2022 } = useGetMostSellers2022Query();
   const { data: data2023 } = useGetMostSellers2023Query();
 
@@ -16,8 +26,8 @@ const Row1 = (props: Props) => {
       return data2022.map((item) => ({
         id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
         name: item.ProductDescription.length > 16 ? item.ProductDescription.slice(0, 16) + '...' : item.ProductDescription,
-        revenue: item.totalRevenue,
-        quantity: item.totalQuantity,
+        Gelir: item.totalRevenue,
+        Adet: item.totalQuantity,
       }));
     }
     return [];
@@ -28,8 +38,8 @@ const Row1 = (props: Props) => {
       return data2023.map((item) => ({
         id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
         name: item.ProductDescription.length > 16 ? item.ProductDescription.slice(0, 16) + '...' : item.ProductDescription,
-        revenue: item.totalRevenue,
-        quantity: item.totalQuantity,
+        Gelir: item.totalRevenue,
+        Adet: item.totalQuantity,
       }));
     }
     return [];
@@ -37,22 +47,22 @@ const Row1 = (props: Props) => {
 
   return (
     <>
-    <DashboardBox gridArea="a">
+    <DashboardBox gridArea="a" >
     <BoxHeader
-          title="Revenue and Expenses"
-          subtitle="top line represents revenue, bottom line represents expenses"
-          sideText="+4%"
-        />
-    <ResponsiveContainer width="100%" height="100%">
+    title='2022 Yılı' 
+    subtitle='En Çok Ciro Sağlayan 3 ürün' 
+    sideText='0.24%'/>
+    <ResponsiveContainer width="100%" height="80%">
+      
         <AreaChart
           width={500}
           height={400}
           data={transformedData2022}
           margin={{
             top: 15,
-            right: 25,
-            left: 2,
-            bottom: 60,
+            right: 15,
+            left: -10,
+            bottom: -10,
           }}
         >
           <defs>
@@ -73,19 +83,19 @@ const Row1 = (props: Props) => {
           tickLine={false}
           axisLine={{strokeWidth:"0"}}
           style={{ fontSize:"10px"}}
-          domain={[10000,350000]}/>
+          domain={[10000,175000]}/>
           
           <Tooltip />
           <Area 
           type="monotone" 
-          dataKey="revenue"
+          dataKey="Gelir"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
           fill="url(#colorRevenue)"/>
           <Area 
           type="monotone" 
-          dataKey="quantity"
+          dataKey="Adet"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
@@ -96,16 +106,20 @@ const Row1 = (props: Props) => {
     
     
     <DashboardBox gridArea="b">
-    <ResponsiveContainer width="100%" height="100%">
+    <BoxHeader
+    title='2023 Yılı' 
+    subtitle='En Çok Ciro Sağlayan 3 ürün' 
+    sideText='0.24%'/>
+    <ResponsiveContainer width="100%" height="80%">
         <AreaChart
           width={500}
           height={400}
           data={transformedData2023}
           margin={{
-            top: 25,
-            right: 20,
-            left: 2,
-            bottom: 5,
+            top: 15,
+            right: 15,
+            left: -10,
+            bottom: -10,
           }}
         >
           <defs>
@@ -131,14 +145,14 @@ const Row1 = (props: Props) => {
           <Tooltip />
           <Area 
           type="monotone" 
-          dataKey="revenue"
+          dataKey="Gelir"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
           fill="url(#colorRevenue)"/>
           <Area 
           type="monotone" 
-          dataKey="quantity"
+          dataKey="Adet"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
@@ -146,7 +160,56 @@ const Row1 = (props: Props) => {
         </AreaChart>
       </ResponsiveContainer>
     </DashboardBox>
-    <DashboardBox gridArea="c"></DashboardBox>
+
+
+
+
+    <DashboardBox gridArea="c">
+      <Boxheader title="2022 ve 2023 yılları" subtitle='En çok satan 2 ürünün karşılaştırması' sideText='0.24%'/>
+      <FlexBetween mt="0.25rem" gap="1.5rem" pr="1rem">
+    <PieChart 
+    width={110} 
+    height={150}
+    margin={{
+      top: 0,
+      right: -10,
+      left: 10,
+      bottom: 0,
+    }}
+    >
+        <Pie
+          stroke='none'
+          data={pieData}
+          innerRadius={18}
+          outerRadius={38}
+          paddingAngle={2} 
+          dataKey="value"
+        >
+          {pieData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={pieColors[index]} />
+          ))}
+        </Pie>
+       
+      </PieChart>
+        
+        <Box ml="-0.7rem" flexBasis={"40%"} textAlign={"center"}>
+          <Typography variant="h4">Fark</Typography>
+          <Typography m="0.5rem 0 " variant="h3" color={palette.primary[300]}>%70</Typography>
+        <Typography variant="h6">Şirket geçen sene en çok kar sağlayan ürüne göre değişim yakalamıştır.</Typography>
+        
+        </Box>
+        <Box ml="-0.7rem" flexBasis={"40%"} textAlign={"center"}>
+          <Typography variant="h5">Adet Bazlı Satışlarda</Typography>
+          <Typography variant="h6">Satılan toplam adet</Typography>
+          <Typography m="0.4rem" variant="h5"> Ciro karşılaştırması </Typography>
+        <Typography variant="h6">Kar oranı %109'a kadar çıkmıştır.</Typography>
+
+        </Box>
+        
+      </FlexBetween>
+    </DashboardBox>
+
+    
     </>
   )
 }

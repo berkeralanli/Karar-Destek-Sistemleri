@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetKpisResponse } from "./types";
+import { GetKpisResponse, GetMonthlyProfit2022Response } from "./types";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
@@ -11,14 +11,22 @@ export const api = createApi({
       providesTags: ["Kpis"],
     }),
     getMostSellers2022: build.query<Array<getMostSellers2022Response>, void>({
-      query: () => "mostSellersKpi/mostSellers2022", // Bu endpoint'ın yolunu düzenleyin
+      query: () => "mostSellersKpi/mostSellers2022",
       providesTags: ["mostSellers2022"],
     }),
     getMostSellers2023: build.query<Array<GetMostSellers2023Response>, void>({
-      query: () => "mostSellersKpi/mostSellers2023", // Bu endpoint'ın yolunu düzenleyin
+      query: () => "mostSellersKpi/mostSellers2023", 
       providesTags: ["MostSellers2023"],
+    }),
+    getMonthlyProfit2022: build.query<Array<GetMonthlyProfit2022Response>, void>({
+      query: () => "monthlyProfitKpi/monthlyProfit2022", 
+      providesTags: ["monthlyProfit2022"],
+    }),
+    getMonthlyProfit2023: build.query<Array<GetMonthlyProfit2023Response>, void>({
+      query: () => "monthlyProfitKpi/monthlyProfit2023", 
+      providesTags: ["monthlyProfit2023"],
     }),
   }),
 });
 
-export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query } = api;
+export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query } = api;
