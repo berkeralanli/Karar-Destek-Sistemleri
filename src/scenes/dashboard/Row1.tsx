@@ -25,7 +25,7 @@ const Row1 = () => {
     if (data2022) {
       return data2022.map((item) => ({
         id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
-        name: item.ProductDescription.length > 16 ? item.ProductDescription.slice(0, 16) + '...' : item.ProductDescription,
+        name: item.ProductDescription.length > 20 ? item.ProductDescription.slice(0, 20) + '...' : item.ProductDescription,
         Gelir: item.totalRevenue,
         Adet: item.totalQuantity,
       }));
@@ -37,7 +37,7 @@ const Row1 = () => {
     if (data2023) {
       return data2023.map((item) => ({
         id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
-        name: item.ProductDescription.length > 16 ? item.ProductDescription.slice(0, 16) + '...' : item.ProductDescription,
+        name: item.ProductDescription.length > 20 ? item.ProductDescription.slice(0, 20) + '...' : item.ProductDescription,
         Gelir: item.totalRevenue,
         Adet: item.totalQuantity,
       }));
@@ -60,8 +60,8 @@ const Row1 = () => {
           data={transformedData2022}
           margin={{
             top: 15,
-            right: 15,
-            left: -10,
+            right: 16,
+            left: -4,
             bottom: -10,
           }}
         >
@@ -78,7 +78,7 @@ const Row1 = () => {
           <XAxis 
           dataKey="name"
           tickLine={false}
-          style={{ fontSize:"10px"}} />
+          style={{ fontSize:"8px"}} />
           <YAxis 
           tickLine={false}
           axisLine={{strokeWidth:"0"}}
@@ -117,8 +117,8 @@ const Row1 = () => {
           data={transformedData2023}
           margin={{
             top: 15,
-            right: 15,
-            left: -10,
+            right: 16,
+            left: -4,
             bottom: -10,
           }}
         >
@@ -135,7 +135,7 @@ const Row1 = () => {
           <XAxis 
           dataKey="name"
           tickLine={false}
-          style={{ fontSize:"10px"}} />
+          style={{ fontSize:"8px"}} />
          <YAxis 
           tickLine={false}
           axisLine={{strokeWidth:"0"}}
@@ -166,9 +166,9 @@ const Row1 = () => {
 
     <DashboardBox gridArea="c">
       <Boxheader title="2022 ve 2023 yılları" subtitle='En çok satan 2 ürünün karşılaştırması' sideText='0.24%'/>
-      <FlexBetween mt="0.25rem" gap="1.5rem" pr="1rem">
+      <FlexBetween mt="1rem" gap="1.5rem" pr="1rem">
     <PieChart 
-    width={110} 
+    width={100} 
     height={150}
     margin={{
       top: 0,

@@ -1,9 +1,10 @@
 import BoxHeader from '@/components/BoxHeader';
 import DashboardBox from '@/components/DashboardBox'
+import YearSelector from '@/components/yearSelector';
 import { useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query } from '@/state/api';
 import { Typography, useTheme } from '@mui/material';
-import { useMemo } from 'react'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,  } from 'recharts';
+import { useMemo, useState } from 'react'
+import { AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,  } from 'recharts';
 
 type Props = {}
 function getMonthName(monthNumber) {
@@ -15,38 +16,32 @@ function getMonthName(monthNumber) {
 }
 
 const Row2 = () => {
-    const { palette } = useTheme();
-    
-    const { data: monthlyData2022 } = useGetMonthlyProfit2022Query();
-    const { data: monthlyData2023 } = useGetMonthlyProfit2023Query();
+  const { palette } = useTheme();
+  const [selectedYear, setSelectedYear] = useState(2022);
 
-    const transformedMonthlyData2022 = useMemo(() => {
-      if (monthlyData2022) {
-          return monthlyData2022.map((item) => ({
-            month: getMonthName(item.month).substring(0, 3),
-            Gelir: item.totalRevenue,
-            
-        }));
+  const handleYearSelect = (year) => {
+    setSelectedYear(year);
+  };
+
+  const { data: monthlyData2022 } = useGetMonthlyProfit2022Query();
+  const { data: monthlyData2023 } = useGetMonthlyProfit2023Query();
+
+  const transformedMonthlyData = useMemo(() => {
+    const monthlyData = selectedYear === 2022 ? monthlyData2022 : monthlyData2023;
+
+    if (monthlyData) {
+      return monthlyData.map((item) => ({
+        month: getMonthName(item.month).substring(0, 3),
+        Gelir: item.totalRevenue,
+      }));
     }
     return [];
-  }, [monthlyData2022]);
-
-  const transformedMonthlyData2023 = useMemo(() => {
-    if (monthlyData2023) {
-        return monthlyData2023.map((item) => ({
-          month: getMonthName(item.month).substring(0, 3),
-          Gelir: item.totalRevenue,
-          
-      }));
-  }
-  return [];
-}, [monthlyData2023]);
-
- 
+  }, [monthlyData2022, monthlyData2023, selectedYear]);
   
   return (
     <>
     <DashboardBox gridArea="d">
+   <YearSelector onSelectYear={handleYearSelect}></YearSelector>
     <BoxHeader 
     title='Aylara Göre Satış Toplamları' 
     subtitle='Grafik satışların ay bazlı gruplanıp toplanmasıyla elde ediliyor' 
@@ -55,7 +50,7 @@ const Row2 = () => {
         <BarChart
           width={500}
           height={400}
-          data={transformedMonthlyData2022}
+          data={transformedMonthlyData}
           margin={{
             top: 10,
             right: 10,
@@ -80,7 +75,61 @@ const Row2 = () => {
     </DashboardBox>
   
     
-    <DashboardBox gridArea="e"></DashboardBox>
+    <DashboardBox gridArea="e">
+    <BoxHeader
+    title='Gelecek Yılın' 
+    subtitle='Beklenen büyüme değeri ile gösterimi' 
+    sideText='0.24%'/>
+    <ResponsiveContainer width="100%" height="80%">
+      
+        <LineChart
+          width={500}
+          height={400}
+          data={transformedMonthlyData}
+          margin={{
+            top: 20,
+            right: 0,
+            left: -10,
+            bottom: 0,
+          }}
+        >
+          <CartesianGrid vertical={false} stroke={palette.grey[800]} />
+          <XAxis 
+          dataKey="month"
+          tickLine={false}
+          style={{ fontSize:"8px"}} />
+          <YAxis 
+          yAxisId="left"
+          tickLine={false}
+          axisLine={false}
+          style={{ fontSize: "10px"}}
+          />
+          <YAxis 
+          yAxisId="right"
+          orientation='right'
+          tickLine={false}
+          axisLine={false}
+          style={{ fontSize: "10px"}}
+          />
+          
+          <Tooltip />
+          <Legend height={20} wrapperStyle={{
+            margin: '0 0 10px 0 '
+          }}/>
+
+          <Line 
+          yAxisId="left"
+          type="monotone"
+          dataKey="Gelir"
+          stroke={palette.tertiary[500]}/>
+          <Line 
+          yAxisId="right"
+          type="monotone"
+          dataKey="Gelir"
+          stroke={palette.primary.main}/>
+        </LineChart>
+      </ResponsiveContainer>
+    </DashboardBox>
     <DashboardBox gridArea="f"></DashboardBox>
     </>
   )
