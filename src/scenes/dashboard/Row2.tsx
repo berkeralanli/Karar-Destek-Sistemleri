@@ -25,7 +25,7 @@ const Row1 = () => {
     if (data2022) {
       return data2022.map((item) => ({
         id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
-        name: item.ProductDescription.length > 20 ? item.ProductDescription.slice(0, 20) + '...' : item.ProductDescription,
+        name: item.ProductDescription.length > 10 ? item.ProductDescription.slice(0, 10) + '...' : item.ProductDescription,
         Gelir: item.totalRevenue,
         Adet: item.totalQuantity,
       }));
@@ -37,7 +37,7 @@ const Row1 = () => {
     if (data2023) {
       return data2023.map((item) => ({
         id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
-        name: item.ProductDescription.length > 20 ? item.ProductDescription.slice(0, 20) + '...' : item.ProductDescription,
+        name: item.ProductDescription.length > 1 ? item.ProductDescription.slice(0, 10) + '...' : item.ProductDescription,
         Gelir: item.totalRevenue,
         Adet: item.totalQuantity,
       }));
@@ -50,7 +50,7 @@ const Row1 = () => {
     <DashboardBox gridArea="d" >
     <BoxHeader
     title='2022 Yılı' 
-    subtitle='En Çok Ciro Sağlayan 3 ürün' 
+    subtitle='En Çok Satış Yapılan 5 ürün' 
     sideText='0.24%'/>
     <ResponsiveContainer width="100%" height="80%">
       
@@ -61,7 +61,7 @@ const Row1 = () => {
           margin={{
             top: 15,
             right: 16,
-            left: -4,
+            left: -5,
             bottom: -10,
           }}
         >
@@ -83,19 +83,20 @@ const Row1 = () => {
           tickLine={false}
           axisLine={{strokeWidth:"0"}}
           style={{ fontSize:"10px"}}
-          domain={[10000,175000]}/>
+          domain={[10000,150000]}/>
+          
           
           <Tooltip />
           <Area 
           type="monotone" 
-          dataKey="Gelir"
+          dataKey="Adet"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
           fill="url(#colorRevenue)"/>
           <Area 
           type="monotone" 
-          dataKey="Adet"
+          dataKey="Gelir"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
@@ -108,7 +109,7 @@ const Row1 = () => {
     <DashboardBox gridArea="e">
     <BoxHeader
     title='2023 Yılı' 
-    subtitle='En Çok Ciro Sağlayan 5 ürün' 
+    subtitle='En Çok Satış Yapılan 5 ürün' 
     sideText='0.24%'/>
     <ResponsiveContainer width="100%" height="80%">
         <AreaChart
@@ -117,8 +118,8 @@ const Row1 = () => {
           data={transformedData2023}
           margin={{
             top: 15,
-            right: 16,
-            left: -4,
+            right: 10,
+            left: -10,
             bottom: -10,
           }}
         >
@@ -145,14 +146,14 @@ const Row1 = () => {
           <Tooltip />
           <Area 
           type="monotone" 
-          dataKey="Gelir"
+          dataKey="Adet"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
           fill="url(#colorRevenue)"/>
           <Area 
           type="monotone" 
-          dataKey="Adet"
+          dataKey="Gelir"
           dot={true}
           stroke={palette.primary.main} 
           fillOpacity={1} 
@@ -165,7 +166,8 @@ const Row1 = () => {
 
 
     <DashboardBox gridArea="f">
-      <Boxheader title="2022 ve 2023 yılları" subtitle='En çok satan 2 ürünün karşılaştırması' sideText='0.24%'/>
+      <Boxheader title="2022 ve 2023 yılları"     subtitle='En Az Satış Yapılan 5 ürün' 
+      sideText='0.24%'/>
       <FlexBetween mt="1rem" gap="1.5rem" pr="1rem">
     <PieChart 
     width={100} 

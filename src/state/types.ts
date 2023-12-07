@@ -35,3 +35,14 @@ export interface GetMonthlyProfit2023Response{
   month: number;
   totalRevenue: number;
 }
+export interface GetBestSellersAllResponse{
+  _id: string;
+  TotalQuantity: number;
+  totalRevenue: number;
+  ProductDescription: string;
+  ProductPrice: number; 
+}
+export interface GetMostSellersCountryResponse{
+  Country: string;
+  salesPercentage: number;
+}

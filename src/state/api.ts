@@ -26,7 +26,15 @@ export const api = createApi({
       query: () => "monthlyProfitKpi/monthlyProfit2023", 
       providesTags: ["monthlyProfit2023"],
     }),
+    getBestSellersAll: build.query<Array<GetBestSellersAllResponse>, void>({
+      query: () => "bestSellersAllKpi/bestSellersAll", 
+      providesTags: ["bestSellersAll"],
+    }),
+    getMostSellersCountry: build.query<Array<GetMostSellersCountryResponse>, void>({
+      query: () => "mostSellersCountryKpi/mostSellersCountry", 
+      providesTags: ["mostSellersCountry"],
+    }),
   }),
 });
 
-export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query } = api;
+export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery} = api;

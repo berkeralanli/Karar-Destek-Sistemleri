@@ -7,16 +7,17 @@ const YearSelector = ({ onSelectYear }) => {
   };
 
   return (
-    <div style={{ justifySelf:'en'}}>
+    
+    <div style={{ display:'flex'}}>
       <select onChange={handleChange}
         style={{
           marginLeft:'0.5rem',
-          marginTop: '0.4rem',
+          marginTop: '0.5rem',
           padding: '5px',
           borderRadius: '4px',
-          backgroundColor: '#f0f0f0', // Arka plan rengi
-          border: '1px solid #ccc', // Kenarlık
-          color: '#333', // Metin rengi
+          backgroundColor: '#f0f0f0',
+          border: '1px solid #ccc', 
+          color: '#333', 
           fontSize: '12px',
         }}>
         <option value={2022}>2022</option>
