@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetKpisResponse, GetMonthlyProfit2022Response } from "./types";
+import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse } from "./types";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
@@ -34,7 +34,17 @@ export const api = createApi({
       query: () => "mostSellersCountryKpi/mostSellersCountry", 
       providesTags: ["mostSellersCountry"],
     }),
+    getMostBuyingCustomers: build.query<Array<GetMostBuyingCustomersResponse>, void>({
+      query: () => "mostBuyingCustomersKpi/mostBuyingCustomers", 
+      providesTags: ["mostBuyingCustomers"],
+    }),
+    getTotalRevenue: build.query<Array<GetTotalRevenueResponse>, void>({
+      query: () => "TotalRevenueKpi/TotalRevenue", 
+      providesTags: ["TotalRevenue"],
+    }),
   }),
 });
 
-export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery} = api;
+export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery, useGetMostBuyingCustomersQuery, useGetTotalRevenueQuery} = api;
+
+

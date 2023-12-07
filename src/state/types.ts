@@ -46,3 +46,12 @@ export interface GetMostSellersCountryResponse{
   Country: string;
   salesPercentage: number;
 }
+export interface GetMostBuyingCustomersResponse{
+  _id: string;
+  TotalQuantity: number;
+  totalRevenue: number;
+  ProductPrice: string; 
+}
+export interface GetTotalRevenueResponse{
+  totalRevenue: number;
+}

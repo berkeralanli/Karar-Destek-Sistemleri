@@ -162,11 +162,9 @@ const Row1 = () => {
       </ResponsiveContainer>
     </DashboardBox>
 
-
-
-
     <DashboardBox gridArea="f">
-      <Boxheader title="2022 ve 2023 yılları"     subtitle='En Az Satış Yapılan 5 ürün' 
+      <Boxheader title="2022 ve 2023 yılları"
+      subtitle='En Az Satış Yapılan 5 ürün'
       sideText='0.24%'/>
       <FlexBetween mt="1rem" gap="1.5rem" pr="1rem">
     <PieChart 
