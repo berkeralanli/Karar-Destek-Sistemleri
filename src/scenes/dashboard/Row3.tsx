@@ -11,27 +11,43 @@ import {  Cell, Pie, PieChart } from 'recharts'
 type Props = {}
 
 const Row3 = () => {
+  
   const { palette } = useTheme();
+  
   const { data: BestSellers } = useGetBestSellersAllQuery();
   const { data: mostBuyingCustomers } = useGetMostBuyingCustomersQuery();
   const { data: mostSellersCountry } = useGetMostSellersCountryQuery();
   const { data: totalRevenue } = useGetTotalRevenueQuery();
   
-  const pieColors = [palette.primary[800], palette.primary[600]];
+  const pieColors = [palette.primary[400], palette.primary[600], palette.primary[800]];
   
   
   const transformedMostSellersCountry = useMemo(() => {
-    if (mostSellersCountry) {
-      return mostSellersCountry.map((item) => ({
-       name:item.Country,
-       value: item.salesPercentage,
-      }));
+    if (mostSellersCountry && mostSellersCountry.length >= 3) {
+      const firstItem = mostSellersCountry[0];
+      const secondItem = mostSellersCountry[1];
+      const thirdItem = mostSellersCountry[2];
+      
+      return [
+        {
+          name: firstItem.Country,
+          value: firstItem.salesPercentage,
+        },
+        {
+          name: secondItem.Country,
+          value: secondItem.salesPercentage,
+        },
+        {
+          name: thirdItem.Country,
+          value: thirdItem.salesPercentage,
+        },
+      ];
     }
-    
+  
     return [];
   }, [mostSellersCountry]);
+  const countriesData = transformedMostSellersCountry.slice(0, 3);
 
-  const firstCountry = transformedMostSellersCountry.length > 0 ? transformedMostSellersCountry[0] : null;
 
 // setTarget
   const [target, setTarget] = useState(50000000);
@@ -46,7 +62,7 @@ const Row3 = () => {
   const formattedRemaining = new Intl.NumberFormat('tr-TR').format(remaining);
     const widthPercentage = `${percentageOfRevenue}%`;
     const managementSupportText = `
-     Şirketin hedefi ${target.toLocaleString("tr-TR")} ₺ Şu ana kadar ulaşılan ciro ${formattedTotalRevenue} ₺. Şirketin hedef ciroya ulaşması için geriye sadece ${formattedRemaining} ₺ kaldı. Hedefler, şirketin büyümesine yol açar ve odaklanmayı sağlar.
+     Şirketin hedefi ₺${target.toLocaleString("tr-TR")}. Şu ana kadar ulaşılan ciro ₺${formattedTotalRevenue}. Şirketin hedef ciroya ulaşması için geriye sadece ₺${formattedRemaining} kaldı. Hedefler, şirketin büyümesine yol açar ve odaklanmayı sağlar.
     Yönetim olarak hedeflere ulaşmak için çalışmaya devam ediyoruz.
   `;
 
@@ -212,50 +228,6 @@ const Row3 = () => {
     </DashboardBox>
 
     <DashboardBox gridArea="i">
-      <BoxHeader 
-      title="2022 ve 2023 yılları" 
-      subtitle='En Az Satış Yapılan 5 ürün' 
-      sideText='0.24%'/>
-      <FlexBetween mt="1rem" gap="1.5rem" pr="1rem">
-    <PieChart 
-    width={100} 
-    height={150}
-    margin={{
-      top: 0,
-      right: -10,
-      left: 10,
-      bottom: 0,
-    }}
-    >
-        <Pie
-          stroke='none'
-          data={transformedMostSellersCountry}
-          innerRadius={18}
-          outerRadius={38}
-          paddingAngle={2} 
-          dataKey="value"
-        >
-          {transformedMostSellersCountry.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={pieColors[index]} />
-          ))}
-        </Pie>
-       
-      </PieChart>
-      <Typography variant="h4">Fark</Typography>
-          <Typography m="0.5rem 0 " variant="h3" color={palette.primary[300]}>%70</Typography>
-        <Typography variant="h6">Şirket geçen sene en çok kar sağlayan ürüne göre değişim yakalamıştır.</Typography>
-        <Box ml="-0.7rem" flexBasis={"40%"} textAlign={"center"}>
-          
-        
-        </Box>
-        <Box ml="-0.7rem" flexBasis={"40%"} textAlign={"center"}>
-       
-
-        </Box>
-       
-              </FlexBetween>
-    </DashboardBox>
-    <DashboardBox gridArea="j">
     <BoxHeader 
       title="Ciro Hedefi Belirleme"
       subtitle='Aktif Olarak Hedef Cironun Belirlenmesi ve Günümüz Cirosu ile Karşılaştırılması '
@@ -280,6 +252,35 @@ const Row3 = () => {
       </Typography>
       <RevenueTargetInput onSubmit={handleTargetSubmit} />
     </DashboardBox>
+
+    <DashboardBox gridArea="j">
+    <BoxHeader 
+      title="Ülkelerin Satış Ağırlıkları" 
+      subtitle='En Yoğun Sipariş Alan 3 Ülke' 
+      sideText='0.24%'
+    />
+    <FlexBetween mt="0.5rem" gap="0.5rem" p="0 1rem" textAlign="center">
+      {countriesData.map((country, index) => (
+        <div key={index}>
+          <PieChart width={110} height={100}>
+            <Pie
+              stroke="none"
+              data={[country]}
+              innerRadius={18}
+              outerRadius={35}
+              paddingAngle={0} 
+              dataKey="value"
+            >
+                <Cell key={`cell-${index}`} fill={pieColors[index]} />
+            </Pie>
+             
+          </PieChart>
+          <Typography variant="h5">{country.name}  {country.value}%</Typography>
+        </div>
+      ))}
+    </FlexBetween>
+  </DashboardBox>
+ 
     </>
   )
 }

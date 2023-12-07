@@ -22,13 +22,14 @@ const RevenueTargetInput = ({ onSubmit }) => {
         placeholder="Hedef Ciro"
         value={targetRevenue}
         onChange={handleInputChange}
-        style={{
+        style={
+          {
           margin: '0.5rem',
           padding: '5px',
           borderRadius: '4px',
           border: '1px solid #ccc',
-          
           fontSize: '12px',
+          width:'100px'
         }}
       />
       <button
@@ -41,6 +42,7 @@ const RevenueTargetInput = ({ onSubmit }) => {
           backgroundColor: palette.tertiary[500],
           border: '1px solid #ccc',
           fontSize: '12px',
+          
         }}
       >
         Gönder

@@ -55,3 +55,9 @@ export interface GetMostBuyingCustomersResponse{
 export interface GetTotalRevenueResponse{
   totalRevenue: number;
 }
+export interface getMonthlyProfitAllYearsResponse{
+  TotalQuantity: number;
+  month: number;
+  totalRevenue: number;
+  
+}

@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
 import Navbar from "@/scenes/navbar";
 import Dashboard from "@/scenes/dashboard"
+import Tahminleme from "@/scenes/tahminleme"
+
 function App(){
   const theme = useMemo(() => createTheme(themeSettings), [])
   return <div className="app">
@@ -18,7 +20,7 @@ function App(){
           <Route path="/" element={<Dashboard/>} />
           <Route 
           path="/tahminleme" 
-          element={<div>tahminleme sayfasi</div>} />
+          element={<Tahminleme/>} />
           </Routes>
         </Box>
     </ThemeProvider>

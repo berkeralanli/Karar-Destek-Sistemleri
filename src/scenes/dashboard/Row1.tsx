@@ -72,7 +72,7 @@ const Row2 = () => {
           <XAxis dataKey="Ay" axisLine={false} tickLine={false} style={{ fontSize: "10px"}}/>
           <YAxis  axisLine={false} tickLine={false} style={{ fontSize: "10px"}} />
           <Tooltip 
-            formatter={(value) => `${value} ₺`} 
+            formatter={(value) => ` ₺${value.toLocaleString("tr-TR")} `}
             labelFormatter={(label) => `${label}`}
           />
           <Bar dataKey="ToplamGelir" fill="url(#colorRevenue)" />
