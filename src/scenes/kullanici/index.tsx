@@ -1,20 +1,16 @@
 import { useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setLogin } from "state";
-import FlexBetween from "@/components/FlexBetween";
 import { Box, Button, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
+import DashboardBox from "@/components/DashboardBox";
+import FlexBetween from "@/components/FlexBetween";
+import BoxHeader from "@/components/BoxHeader";
+import { DataGrid } from "@mui/x-data-grid";
+import { useGetUserQuery } from "@/state/api";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-});
-
-const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
@@ -26,34 +22,124 @@ const initialValuesRegister = {
   password: "",
 };
 
-const initialValuesLogin = {
-  email: "",
-  password: "",
-};
+const RegisterPage = () => {
+  const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
 
-const Form = () => {
-  const [pageType, setPageType] = useState("login");
+  
+  const { data: usersData } = useGetUserQuery();
+  console.log("🚀 ~ file: index.tsx:28 ~ RegisterPage ~ usersData:", usersData)
+
+
+  const gridTemplateLargeScreens = `
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+  "form content"
+`;
+
+const gridTemplateSmallScreens = `
+  "form"
+  "form"
+  "form"
+  "form"
+  "content"
+  "content"
+  "content"
+  "content"
+  "content"
+  "content"
+  "content"
+  "content"
+`;
+  const [pageType, setPageType] = useState("register");
   const { palette } = useTheme();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const isLogin = pageType === "login";
-  const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
-    // Implement registration logic here
+    try {
+      const userData = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        // Diğer form alanlarına göre buraya ekleme yapabilirsiniz
+      };
+  
+      const savedUserResponse = await fetch(
+        "http://localhost:1337/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
+  
+      const savedUser = await savedUserResponse.json();
+      onSubmitProps.resetForm();
+  
+      if (savedUser) {
+        alert('Yeni Kayıt Başarıyla Gerçekleşti');
+      }
+    } catch (error) {
+      alert("Kayıt sırasında hata:", error);
+      // Hata durumunda yapılacak işlemler...
+    }
   };
 
-  const handleFormSubmit = async (values, onSubmitProps) => {
-    if (isLogin) await login(values, onSubmitProps);
-    if (isRegister) await register(values, onSubmitProps);
-  };
 
   return (
+    <Box
+    width="100%"
+    height="100%"
+    display="grid"
+    gap="1.5rem"
+    sx={
+      isAboveMediumScreens
+        ? {
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateAreas: gridTemplateLargeScreens,
+          }
+        : {
+            gridTemplateAreas: gridTemplateSmallScreens,
+          }
+    }
+  >
+    <DashboardBox gridArea="form"
+    width="100%"
+    height="100%"
+    p="1.5rem"
+    mt="1rem"
+    ml="0rem"
+    overflow="hidden">
+       <Typography fontWeight="bold" fontSize="32px" color={palette.grey[400]} textAlign="center" mb="0.2rem">
+          Yönetici Ekleme Paneli
+        </Typography>
+        <Typography fontWeight="bold" fontSize="11px" color={palette.grey[600]} textAlign="center" >
+        Bu alanda yönetici eklemek için bir form gönderebilir, yeni bir kullanıcı girişi sağlayabilirsiniz
+        </Typography>
+        
+      <FlexBetween m="2rem 3rem -1rem 3rem" pt="1rem"  sx={{
+              "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+            }} >
+    <Box
+    width="100%"
+    textAlign="center"
+     sx={{
+      
+      "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+    }}> 
     <Formik
-      onSubmit={handleFormSubmit}
-      initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
-      validationSchema={isLogin ? loginSchema : registerSchema}
+      onSubmit={register}
+      initialValues={initialValuesRegister}
+      validationSchema={registerSchema}
     >
       {({
         values,
@@ -69,52 +155,154 @@ const Form = () => {
           <Box
             display="grid"
             gap="30px"
-            gridTemplateColumns="repeat(4,minmax(0, 1fr))"
+            gridTemplateColumns="repeat(1,minmax(0, 1fr))"
             sx={{
               "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
-            {/* Rest of the form inputs */}
+            <div>
+              <TextField
+                type="text"
+                placeholder="Ad"
+                name="firstName"
+                value={values.firstName}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  mb: "2rem,",
+                  borderRadius:"5px",
+                }}
+              />
+            </div>
+            <div>
+              <TextField
+                type="text"
+                placeholder="Soyad"
+                name="lastName"
+                value={values.lastName}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  mb: "2rem,",
+                  borderRadius:"5px",
+                }}
+              />
+            </div>
+            <div>
+              <TextField
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  mb: "2rem,",
+                  borderRadius:"5px",
+                }}
+              />
+            </div>
+            <div>
+              <TextField
+                type="password"
+                placeholder="Şifre"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  mb: "2rem,",
+                  borderRadius:"5px",
+                  
+                }}
+              />
+            </div>
           </Box>
 
-          {/* Buttons */}
+          {/* Butonlar */}
           <Box>
             <Button
-              fullWidth
+              
               type="submit"
               sx={{
+                width:"50%",
+                borderRadius:"50px",
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: palette.primary.main,
-                color: palette.primary.main,
-                "&:hover": { color: palette.primary.main },
+                backgroundColor: palette.tertiary[500],
+                color: palette.primary[600],
+                "&:hover": { color: palette.tertiary[500]},
               }}
             >
-              {isLogin ? "LOGIN" : "REGISTER"}
+              {"REGISTER"}
             </Button>
             <Typography
               onClick={() => {
-                setPageType(isLogin ? "register" : "login");
+                setPageType("register");
                 resetForm();
               }}
               sx={{
                 textDecoration: "underline",
-                color: palette.primary[300],
+                color: palette.primary[200],
                 "&:hover": {
                   cursor: "pointer",
-                  color: palette.primary[300],
+                  color: palette.primary[200],
                 },
               }}
             >
-              {isLogin
-                ? "Kullanıcı adı yok mu? Buradan kayıt ol"
-                : "Kayıtlıysan Giriş Yap"}
+
             </Typography>
           </Box>
         </form>
       )}
     </Formik>
+   </Box>
+   </FlexBetween>
+   </DashboardBox>
+
+
+
+   {/* <DashboardBox gridArea="content">
+    <BoxHeader 
+      title='Zirvedeki Müşteriler'
+      subtitle=' Detaylı Müşteri Analizi ve Favori ürünü '
+      sideText={`${transformedDataMostBuyers?.length} Müşteri`}/>
+       <Box
+          mt="1.5rem"
+          p="0 0.5rem"
+          height={240}
+          sx={{
+            "& .MuiDataGrid-root": {
+              color: palette.grey[300],
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize:'10px',
+              borderBottom: `1px solid ${palette.grey[800]} !important`,
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              fontSize:'10px',
+              borderBottom: `1px solid ${palette.grey[800]} !important`,
+            },
+            "& .MuiDataGrid-columnSeparator": {
+              visibility: "hidden",
+            },
+          }}
+        >
+      <DataGrid
+      columnHeaderHeight={25}
+      rowHeight={35}
+      hideFooter={true}
+      rows={transformedDataMostBuyers || []}
+      columns={buyersColumn}/>
+      </Box>
+    </DashboardBox> */}
+</Box>
   );
 };
 
-export default Form;
+export default RegisterPage;

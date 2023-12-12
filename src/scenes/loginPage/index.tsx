@@ -1,14 +1,19 @@
+import DashboardBox from "@/components/DashboardBox";
+import FlexBetween from "@/components/FlexBetween";
+import { Box, Typography, useTheme, useMediaQuery, TextField, Button } from "@mui/material";
 import { useState } from "react";
-import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+const LoginPage = () => {
+  
+  const { palette } = useTheme();
+  const isNonMobile = useMediaQuery("(min-width: 1200px)");
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
-  const history = useHistory();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,40 +23,100 @@ const LoginForm = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("/login", formData);
-      const { token } = response.data;
-      // Token'i local storage'e kaydedebilirsin
-      localStorage.setItem("token", token);
-      // Giriş başarılıysa farklı bir sayfaya yönlendir
-      history.push("/dashboard"); // Örnek bir yönlendirme
-    } catch (error) {
-      console.error("Login failed", error);
-      // Hata durumunda mesaj gösterilebilir veya başka bir işlem yapılabilir
+    // Burada formData'yı kullanarak giriş yapılabilir veya başka bir işlem gerçekleştirilebilir.
+    // Örneğin, statik bir kullanıcı adı ve şifre kontrolü yapabilirsiniz.
+    if (formData.email === "admin@ornek.com" && formData.password === "12345") {
+      // Kullanıcı girişini başarılı olarak kabul edip, yönlendirme yapabilirsiniz.
+      navigate("/dashboard");
+    } else {
+      // Hatalı giriş durumunda bir mesaj gösterebilirsiniz.
+      alert("Hatalı giriş!");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      <button type="submit">Login</button>
-    </form>
-  );
+    
+    <DashboardBox
+    width="80%"
+    height="80%"
+    p="1rem"
+    m="7rem"
+    ml="10rem"
+    overflow="hidden">
+      <FlexBetween m="0rem 10rem" p="2rem"  sx={{
+              "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+            }} >
+    <Box
+    width="100%"
+    textAlign="center"
+     sx={{
+      
+      "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+    }}>
+      <Box
+        width="100%"
+
+        textAlign="center"
+      >
+        <Typography fontWeight="bold" fontSize="32px" color="primary" textAlign="center">
+          RetroLuks
+        </Typography>
+      </Box>
+
+      <Box
+
+        p="1rem"
+        m="0.5rem auto"
+        borderRadius="1.5rem"
+      >
+        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
+          RetroLuks Yönetici Paneline Hoş Geldiniz! 
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            type="text"
+            placeholder="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+           
+            sx={{
+              backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+              mb:"0.5rem"
+            }}
+            
+          />
+          <TextField
+            type="password"
+            placeholder="Şifre"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            fullWidth
+            
+            sx={{
+              backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+              mb: "2rem,"
+            }}
+          />
+          <Button  variant="contained" color="primary" type="submit"  sx={{
+                mt: "1rem",
+                backgroundColor: palette.tertiary[500],
+                color: palette.background.alt,
+                "&:hover": { color: palette.primary.main },
+              }}>
+            Login
+          </Button>
+        </form>
+      </Box>
+    </Box>
+  
+</FlexBetween>
+</DashboardBox>
+);
 };
 
-export default LoginForm;
+export default LoginPage;

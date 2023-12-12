@@ -7,7 +7,8 @@ import { Box } from "@mui/material";
 import Navbar from "@/scenes/navbar";
 import Dashboard from "./scenes/dashboard";
 import Tahminleme from "./scenes/tahminleme";
-import kullanici from "./scenes/kullanici";
+import LoginForm from "./scenes/loginPage";
+import RegisterPage from "./scenes/kullanici";
 
 
 
@@ -23,9 +24,11 @@ function App(){
         <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
         <Navbar />
         <Routes>
-          <Route path="/" element={<Dashboard/>} />
+          <Route path="/" element={<LoginForm/>} />
+          <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/tahminleme"  element={ <Tahminleme/> } />
-          <Route path="/login//"  element={ <Tahminleme/> } />
+          <Route path="/kullanici"  element={ <RegisterPage/> } />
+
  
 
           </Routes>

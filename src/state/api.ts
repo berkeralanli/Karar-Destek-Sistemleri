@@ -46,9 +46,13 @@ export const api = createApi({
       query: () => "MonthlyProfitAllYearsKpi/monthlyProfitAllYears", 
       providesTags: ["monthlyProfitAllYears"],
     }),
+    getUser: build.query<Array<getUserResponse>, void>({
+      query: () => "userKpi/user", 
+      providesTags: ["users"],
+    }),
   }),
 });
 
-export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery, useGetMostBuyingCustomersQuery, useGetTotalRevenueQuery, useGetMonthlyProfitAllYearsQuery} = api;
+export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery, useGetMostBuyingCustomersQuery, useGetTotalRevenueQuery, useGetMonthlyProfitAllYearsQuery, useGetUserQuery} = api;
 
 

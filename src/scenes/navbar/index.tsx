@@ -1,14 +1,20 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import { Box, Typography, useTheme } from '@mui/material';
 import FlexBetween from '@/components/FlexBetween';
 
-type Props = {}
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
   const { palette } = useTheme(); 
   const [selected, setSelected] = useState("dashboard");
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/';
+
+  if (isLoginPage) {
+    // Login sayfasındaysanız Navbar'ı göstermeyin
+    return null;
+  }
+
   return (
     // sol taraf 
 
@@ -27,7 +33,7 @@ const Navbar = (props: Props) => {
           color: palette.primary[100]
         }}}>
           <Link
-          to="/"
+          to="/dashboard"
           onClick={() => setSelected("dashboard")}
           style={{
             color:selected === "dashboard" ? "inherit" : palette.grey[700],
@@ -53,21 +59,17 @@ const Navbar = (props: Props) => {
           color: palette.primary[100]
         }}}>
           <Link
-          to="/kullanicilar"
-          onClick={() => setSelected("kullanicilar")}
+          to="/kullanici"
+          onClick={() => setSelected("kullanici")}
           style={{
-            color:selected === "kullanicilar" ? "inherit" : palette.grey[700],
+            color:selected === "kullanici" ? "inherit" : palette.grey[700],
             textDecoration: "inherit"
           }}>
             kullanıcı
           </Link>
         </Box>
-
-
       </FlexBetween>
-
-      
-      </FlexBetween>
+    </FlexBetween>
   );
 };
 
