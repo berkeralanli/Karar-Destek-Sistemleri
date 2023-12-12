@@ -49,6 +49,19 @@ const Navbar = (props: Props) => {
             tahminleme
           </Link>
         </Box>
+        <Box sx={{"&:hover": {
+          color: palette.primary[100]
+        }}}>
+          <Link
+          to="/kullanicilar"
+          onClick={() => setSelected("kullanicilar")}
+          style={{
+            color:selected === "kullanicilar" ? "inherit" : palette.grey[700],
+            textDecoration: "inherit"
+          }}>
+            kullanıcı
+          </Link>
+        </Box>
 
 
       </FlexBetween>

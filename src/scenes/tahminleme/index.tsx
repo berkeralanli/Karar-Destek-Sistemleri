@@ -2,11 +2,12 @@ import React, { useMemo, useState } from 'react';
 import BoxHeader from '@/components/BoxHeader';
 import DashboardBox from '@/components/DashboardBox';
 import FlexBetween from '@/components/FlexBetween';
-import { useGetMonthlyProfitAllYearsQuery, useGetTotalRevenueQuery } from '@/state/api';
-import { Box, Button, Typography, useTheme } from '@mui/material';
+import { useGetMonthlyProfitAllYearsQuery } from '@/state/api';
+import { Box, Typography, useTheme } from '@mui/material';
 import RevenueTargetInput from '../../components/revenueTargetInput';
-import { Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
+//
 function getMonthName(monthNumber) {
   const monthNames = [
     "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
@@ -18,59 +19,70 @@ function getMonthName(monthNumber) {
 const calculateWeightedRevenue = (monthlyData, growthExpectation, totalRevenue) => {
   const weights = [0.08, 0.07, 0.07, 0.06, 0.07, 0.06, 0.08, 0.07, 0.12, 0.07, 0.14, 0.10];
   const growthFactor = growthExpectation / 100;
-  const growthAdjustedRevenue = (8664883 * (1 + growthFactor)) / 100;
+  const growthAdjustedRevenue = (8664883 * (1 + growthFactor));
   const weightedRevenue = monthlyData.map((item, index) => {
     const monthlyWeightedRevenue = Math.round(growthAdjustedRevenue * weights[index]);
     return {
       Ay: getMonthName(item.month).substring(0, 3),
-      ToplamGelir: item.totalRevenue,
-      AgirlikliGelir: monthlyWeightedRevenue,
+      sonYilGelirleri: item.totalRevenue,
+      gelecekYilGelirleri: monthlyWeightedRevenue,
     };
   });
 
   return weightedRevenue;
 };
 const Tahminleme = () => {  
-  const { data: totalRevenue } = useGetTotalRevenueQuery();
-  console.log("🚀 ~ file: index.tsx:35 ~ Tahminleme ~ totalRevenue:", totalRevenue)
+  const totalRevenue = 8664883
   const { palette } = useTheme();
   const [isPredictions, setIsPredictions] = useState(false);
   const { data: monthlyProfitAllYears } = useGetMonthlyProfitAllYearsQuery();
   const [weightedData, setWeightedData] = useState([]);
+  const [dollarWeightedData, setDollarWeightedData] = useState([]);
+  
 
   const handleRevenueTargetSubmit = (growth, exchangeRate) => {
-    const totalRevenueValue = totalRevenue?.value ?? 0; // Eğer totalRevenue verisi yoksa 0 kabul et
+    const totalRevenueValue = totalRevenue?.value ?? 0;
     const weightedRevenue = calculateWeightedRevenue(
       monthlyProfitAllYears,
       growth,
       totalRevenue
     );
-    
+  
     setWeightedData(weightedRevenue);
-    
-    
+  
+    const dollarWeightedData = weightedRevenue.map((item) => ({
+      ...item,
+      gelecekYilGelirleriDolar: Math.round(item.gelecekYilGelirleri / exchangeRate),
+    }));
+  
+    setDollarWeightedData(dollarWeightedData); // Yeni hesaplanan dolar cinsinden ağırlıklı gelir verisi
+  
     console.log(`Büyüme Beklentisi: ${growth}, Dolar Kuru Beklentisi: ${exchangeRate}`);
     console.log('Aylık Ağırlıklı Gelir Verisi:', weightedRevenue);
+    console.log('Aylık Ağırlıklı Gelir Verisi (Dolar cinsinden):', dollarWeightedData);
   };
 
   const transformedAllMonthlyData = useMemo(() => {
     if (monthlyProfitAllYears) {
       const initialTransformedData = monthlyProfitAllYears.map((item) => ({
         Ay: getMonthName(item.month).substring(0, 3),
-        ToplamGelir: item.totalRevenue,
+        sonYilGelirleri: item.totalRevenue,
+        gelecekYilGelirleri: 0, // Varsayılan değeri sıfır olarak ayarla
+        gelecekYilGelirleriDolar: 0, // Varsayılan dolar cinsinden değeri sıfır olarak ayarla
       }));
-
-      // Oluşturulan ağırlıklı gelir verisini ekleyelim
+  
+      // Ağırlıklı gelir verilerini ekleyelim
       if (weightedData.length > 0) {
         weightedData.forEach((data, index) => {
-          initialTransformedData[index].AgirlikliGelir = data.AgirlikliGelir;
+          initialTransformedData[index].gelecekYilGelirleri = data.gelecekYilGelirleri;
+          initialTransformedData[index].gelecekYilGelirleriDolar = dollarWeightedData[index]?.gelecekYilGelirleriDolar || 0;
         });
       }
-
+  
       return initialTransformedData;
     }
     return [];
-  }, [monthlyProfitAllYears, weightedData]);
+  }, [monthlyProfitAllYears, weightedData, dollarWeightedData]);
 
   return (
     <DashboardBox 
@@ -80,10 +92,9 @@ const Tahminleme = () => {
     overflow="hidden">
       <FlexBetween m="1rem 2.5rem" gap="1rem">
         <Box>
-          <Typography variant="h3">Revenue and Predictions</Typography>
+          <Typography variant="h3">Büyüme Beklentisi ve Dolar Bazında Gösterim </Typography>
           <Typography variant="h6">
-            charted revenue and predicted revenue based on a simple linear
-            regression model
+            En son yılın ay bazlı gelirleri. Ayların toplam gelire olan ağırlıklarına göre gelecek yıl için büyüme beklentisinde değişen ve aynı zamanda dolar cinsinden takip edilebilecek bir grafik.
           </Typography>
         </Box>
         <RevenueTargetInput onSubmit={handleRevenueTargetSubmit} />
@@ -101,20 +112,31 @@ const Tahminleme = () => {
           }}
         >
           <defs>
-            <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={palette.primary[300]} stopOpacity={0.8}/>
-                <stop offset="95%" stopColor={palette.primary[300]} stopOpacity={0}/>
+            <linearGradient id="colorToplamGelir" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={palette.primary[800]} stopOpacity={0.8}/>
+                <stop offset="95%" stopColor={palette.primary[800]} stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="colorAgirlikliGelir" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={palette.primary[500]} stopOpacity={0.8}/>
+                <stop offset="95%" stopColor={palette.primary[500]} stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="colorAgirlikliGelirDolar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={palette.primary[200]} stopOpacity={0.8}/>
+                <stop offset="95%" stopColor={palette.primary[200]} stopOpacity={0}/>
               </linearGradient>
               
           </defs>
           <CartesianGrid vertical={false} stroke={palette.grey[800]}/>
           <XAxis dataKey="Ay" axisLine={false} tickLine={false} style={{ fontSize: "10px"}}/>
           <YAxis  axisLine={false} tickLine={false} style={{ fontSize: "10px"}} />
-          
-
+          <Tooltip
+            formatter={(value) => ` ₺${value.toLocaleString("tr-TR")} `}
+            labelFormatter={(label) => `${label}`}
+          />
           <Legend />
-          <Bar dataKey="ToplamGelir" fill="url(#colorRevenue)" activeBar={<Rectangle stroke="blue" />} />
-          <Bar dataKey="AgirlikliGelir" fill="url(#colorRevenue)" activeBar={<Rectangle stroke="blue" />} />
+          <Bar dataKey="sonYilGelirleri" fill="url(#colorToplamGelir)" activeBar={<Rectangle stroke="blue" />} />
+          <Bar dataKey="gelecekYilGelirleri" fill="url(#colorAgirlikliGelir)" activeBar={<Rectangle stroke="blue" />} />
+          <Bar dataKey="gelecekYilGelirleriDolar"  fill="url(#colorAgirlikliGelirDolar)" activeBar={<Rectangle stroke="blue" />} />
         </BarChart>
       </ResponsiveContainer>
     </DashboardBox>
