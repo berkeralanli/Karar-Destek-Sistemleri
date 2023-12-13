@@ -26,8 +26,8 @@ const RegisterPage = () => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
 
   
-  const { data: usersData } = useGetUserQuery();
-  console.log("🚀 ~ file: index.tsx:28 ~ RegisterPage ~ usersData:", usersData)
+  const { data: usersData, refetch} = useGetUserQuery();
+
 
   const transofrmedUserData = useMemo(() => {
     if (usersData) {
@@ -95,6 +95,7 @@ const gridTemplateSmallScreens = `
   
       const savedUser = await savedUserResponse.json();
       onSubmitProps.resetForm();
+      await refetch();
   
       if (savedUser) {
         alert('Yeni Kayıt Başarıyla Gerçekleşti');
