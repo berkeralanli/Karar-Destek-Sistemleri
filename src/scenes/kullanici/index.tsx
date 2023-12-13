@@ -120,7 +120,7 @@ const gridTemplateSmallScreens = `
     
     {
       field: "email",
-      headerName: "email",
+      headerName: "Email",
       flex: 1,
     },
     
@@ -319,8 +319,8 @@ const gridTemplateSmallScreens = `
               borderBottom: `1px solid ${palette.grey[800]} !important`,
             },
             "& .MuiDataGrid-columnHeaders": {
-              fontSize:'10px',
-              borderBottom: `1px solid ${palette.grey[800]} !important`,
+              fontSize:'11px',
+              borderBottom: `1px solid ${palette.grey[600]} !important`,
             },
             "& .MuiDataGrid-columnSeparator": {
               visibility: "hidden",
