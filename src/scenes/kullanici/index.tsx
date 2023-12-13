@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { Box, Button, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
@@ -29,6 +29,17 @@ const RegisterPage = () => {
   const { data: usersData } = useGetUserQuery();
   console.log("🚀 ~ file: index.tsx:28 ~ RegisterPage ~ usersData:", usersData)
 
+  const transofrmedUserData = useMemo(() => {
+    if (usersData) {
+      return usersData.map((item) => ({
+        id: item._id,
+        firstName: item.firstName,
+        lastName: item.lastName,
+        email: item.email,
+      }));
+    }
+    return [];
+  }, [usersData]);
 
   const gridTemplateLargeScreens = `
   "form content"
@@ -70,7 +81,7 @@ const gridTemplateSmallScreens = `
         password: values.password,
         // Diğer form alanlarına göre buraya ekleme yapabilirsiniz
       };
-  
+      
       const savedUserResponse = await fetch(
         "http://localhost:1337/register",
         {
@@ -90,9 +101,30 @@ const gridTemplateSmallScreens = `
       }
     } catch (error) {
       alert("Kayıt sırasında hata:", error);
-      // Hata durumunda yapılacak işlemler...
+
     }
   };
+
+  const usersColumns= [
+    {
+    
+      field: "firstName",
+      headerName: "Ad",
+      flex: 1,
+    },
+    {
+      field:"lastName",
+      headerName: "Soyad",
+      flex: 1,
+  },
+    
+    {
+      field: "email",
+      headerName: "email",
+      flex: 1,
+    },
+    
+  ]; 
 
 
   return (
@@ -115,8 +147,8 @@ const gridTemplateSmallScreens = `
     <DashboardBox gridArea="form"
     width="100%"
     height="100%"
-    p="1.5rem"
-    mt="1rem"
+    p="1rem"
+    mt="3rem"
     ml="0rem"
     overflow="hidden">
        <Typography fontWeight="bold" fontSize="32px" color={palette.grey[400]} textAlign="center" mb="0.2rem">
@@ -238,7 +270,7 @@ const gridTemplateSmallScreens = `
                 "&:hover": { color: palette.tertiary[500]},
               }}
             >
-              {"REGISTER"}
+              {"KAYIT"}
             </Button>
             <Typography
               onClick={() => {
@@ -264,17 +296,19 @@ const gridTemplateSmallScreens = `
    </FlexBetween>
    </DashboardBox>
 
-
-
-   {/* <DashboardBox gridArea="content">
+ 
+    <DashboardBox gridArea="content
+    "width="100%"
+    height="80%"
+    p="1rem"
+    mt="6rem"
+    overflow="hidden">
     <BoxHeader 
-      title='Zirvedeki Müşteriler'
-      subtitle=' Detaylı Müşteri Analizi ve Favori ürünü '
-      sideText={`${transformedDataMostBuyers?.length} Müşteri`}/>
+      title='Kayıtlı Kullanıcılar'
+      sideText={`${transofrmedUserData?.length} Kullanıcı`}/>
        <Box
           mt="1.5rem"
-          p="0 0.5rem"
-          height={240}
+          height="100%"
           sx={{
             "& .MuiDataGrid-root": {
               color: palette.grey[300],
@@ -297,10 +331,10 @@ const gridTemplateSmallScreens = `
       columnHeaderHeight={25}
       rowHeight={35}
       hideFooter={true}
-      rows={transformedDataMostBuyers || []}
-      columns={buyersColumn}/>
+      rows={transofrmedUserData || []}
+      columns={usersColumns}/>
       </Box>
-    </DashboardBox> */}
+    </DashboardBox> 
 </Box>
   );
 };

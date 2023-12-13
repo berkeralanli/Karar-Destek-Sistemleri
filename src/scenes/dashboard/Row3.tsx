@@ -19,7 +19,7 @@ const Row3 = () => {
   const { data: mostSellersCountry } = useGetMostSellersCountryQuery();
   const { data: totalRevenue } = useGetTotalRevenueQuery();
   
-  const pieColors = [palette.primary[400], palette.primary[600], palette.primary[800]];
+  const pieColors = [palette.primary[300], palette.primary[700], palette.primary[800]];
   
   
   const transformedMostSellersCountry = useMemo(() => {

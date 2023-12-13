@@ -47,7 +47,7 @@ const Row2 = () => {
     <YearSelector onSelectYear={handleYearSelect}></YearSelector>
     <BoxHeader 
     title='Aylara Göre Satış Toplamları' 
-    subtitle='Grafik satışların ay bazlı gruplanıp toplanmasıyla elde ediliyor' 
+    subtitle='Grafik Satışların Ay Bazlı Gruplanıp Toplanmasıyla Elde Ediliyor' 
     sideText='0.24%'/>
     <ResponsiveContainer width="100%" height="80%">
         <BarChart
@@ -84,7 +84,7 @@ const Row2 = () => {
     <DashboardBox gridArea="b">
     <BoxHeader
     title='Yılı  ' 
-    subtitle='Toplam gelir ve Toplam adetin gösterimi' 
+    subtitle='Toplam Gelir ve Toplam Adetin Gösterimi' 
     sideText='0.24%'/>
     <ResponsiveContainer width="100%" height="80%">
       
@@ -122,7 +122,10 @@ const Row2 = () => {
            
           />
           
-          <Tooltip />
+          <Tooltip 
+            formatter={(value) => ` ${value.toLocaleString("tr-TR")} `}
+            labelFormatter={(label) => `${label}`}
+          />
           <Legend height={10} wrapperStyle={{
             margin: '0 0 10px 0 '
           }}/>
@@ -144,7 +147,7 @@ const Row2 = () => {
     <BoxHeader 
     title='Ürün Satış Verimliliği' 
     subtitle='Aylık Ciro / Aylık Satılan Ürün'
-    sideText='1.5+'/>
+    sideText='1.75+'/>
     <ResponsiveContainer width="100%" height="80%">
         <ScatterChart
           margin={{

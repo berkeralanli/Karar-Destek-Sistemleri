@@ -86,7 +86,10 @@ const Row1 = () => {
           domain={[10000,150000]}/>
           
           
-          <Tooltip />
+          <Tooltip 
+            formatter={(value) => ` ${value.toLocaleString("tr-TR")} `}
+            labelFormatter={(label) => `${label}`}
+          />
           <Area 
           type="monotone" 
           dataKey="Adet"
@@ -143,7 +146,10 @@ const Row1 = () => {
           style={{ fontSize:"10px"}}
           domain={[10000,350000]}/>
           
-          <Tooltip />
+          <Tooltip 
+            formatter={(value) => ` ${value.toLocaleString("tr-TR")} `}
+            labelFormatter={(label) => `${label}`}
+          />
           <Area 
           type="monotone" 
           dataKey="Adet"

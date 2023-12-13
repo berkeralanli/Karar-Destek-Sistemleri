@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse, getMostSellers2022Response, GetMostSellers2023Response, GetMonthlyProfit2023Response, GetBestSellersAllResponse, GetMostSellersCountryResponse, getMonthlyProfitAllYearsResponse} from "./types";
+import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse, getMostSellers2022Response, GetMostSellers2023Response, GetMonthlyProfit2023Response, GetBestSellersAllResponse, GetMostSellersCountryResponse, getMonthlyProfitAllYearsResponse, getUserResponse} from "./types";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
@@ -47,7 +47,7 @@ export const api = createApi({
       providesTags: ["monthlyProfitAllYears"],
     }),
     getUser: build.query<Array<getUserResponse>, void>({
-      query: () => "userKpi/user", 
+      query: () => "users", 
       providesTags: ["users"],
     }),
   }),

@@ -60,3 +60,10 @@ export interface getMonthlyProfitAllYearsResponse{
   totalRevenue: number;
   
 }
+export interface getUserResponse{
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: number; 
+}
