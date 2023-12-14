@@ -23,16 +23,29 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Burada formData'yı kullanarak giriş yapılabilir veya başka bir işlem gerçekleştirilebilir.
-    // Örneğin, statik bir kullanıcı adı ve şifre kontrolü yapabilirsiniz.
-    if (formData.email === "admin@ornek.com" && formData.password === "12345") {
-      // Kullanıcı girişini başarılı olarak kabul edip, yönlendirme yapabilirsiniz.
-      navigate("/dashboard");
-    } else {
-      // Hatalı giriş durumunda bir mesaj gösterebilirsiniz.
-      alert("Hatalı giriş!");
+    try {
+      const response = await fetch("http://localhost:1337/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        // Başarılı giriş durumu
+        navigate("/dashboard");
+      } else {
+        // Hatalı giriş durumu
+        alert("Hatalı giriş!");
+      }
+    } catch (error) {
+      // Hata durumu
+      console.error("Giriş yapılırken bir hata oluştu:", error);
     }
   };
 

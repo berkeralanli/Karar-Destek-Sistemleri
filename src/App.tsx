@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { themeSettings } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter,  Route, Routes } from "react-router-dom";
+import { BrowserRouter,  Navigate,  Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
 import Navbar from "@/scenes/navbar";
 import Dashboard from "./scenes/dashboard";
@@ -15,6 +15,7 @@ import RegisterPage from "./scenes/kullanici";
 function App(){
 
   const theme = useMemo(() => createTheme(themeSettings), [])
+  const isLoggedIn = !!localStorage.getItem("token");
 
 
   return <div className="app">
@@ -25,9 +26,18 @@ function App(){
         <Navbar />
         <Routes>
           <Route path="/" element={<LoginForm/>} />
-          <Route path="/dashboard" element={<Dashboard/>} />
-          <Route path="/tahminleme"  element={ <Tahminleme/> } />
-          <Route path="/kullanici"  element={ <RegisterPage/> } />
+          <Route
+                path="/dashboard"
+                element={isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />}
+              />
+              <Route
+                path="/tahminleme"
+                element={isLoggedIn ? <Tahminleme /> : <Navigate to="/" replace />}
+              />
+              <Route
+                path="/kullanici"
+                element={isLoggedIn ? <RegisterPage /> : <Navigate to="/" replace />}
+              />
 
  
 
