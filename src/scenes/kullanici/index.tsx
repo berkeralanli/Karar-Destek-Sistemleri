@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { Box, Button, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme, useMediaQuery, ButtonBase } from "@mui/material";
 import DashboardBox from "@/components/DashboardBox";
 import FlexBetween from "@/components/FlexBetween";
 import BoxHeader from "@/components/BoxHeader";
@@ -22,10 +22,9 @@ const initialValuesRegister = {
   password: "",
 };
 
+
 const RegisterPage = () => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
-
-  
   const { data: usersData, refetch} = useGetUserQuery();
 
 
@@ -68,10 +67,40 @@ const gridTemplateSmallScreens = `
   "content"
   "content"
 `;
+  const [userEmail, setUserEmail] = useState('');
   const [pageType, setPageType] = useState("register");
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const handleDeleteUser = async (values, onSubmitProps) => {
+    try {
+      // Burada inputtan alınan e-posta adresini state üzerinden alabilirsin
+      const userEmail = values.userEmail;
+  
+      const deletedUserResponse = await fetch(
+        "http://localhost:1337/deleteUser",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail }),
+        }
+      );
+  
+      const deletedUser = await deletedUserResponse.json();
+  
+      if (deletedUser.message === "Kullanıcı başarıyla silindi") {
 
+        alert("Kullanıcı başarıyla silindi");
+
+        await refetch();
+      } else {
+        alert("Kullanıcı silinirken bir hata oluştu");
+      }
+    } catch (error) {
+      alert("Kullanıcı silinirken bir hata oluştu:", error);
+    }
+  };
   const register = async (values, onSubmitProps) => {
     try {
       const userData = {
@@ -105,7 +134,8 @@ const gridTemplateSmallScreens = `
 
     }
   };
-
+  
+   
   const usersColumns= [
     {
     
@@ -131,7 +161,7 @@ const gridTemplateSmallScreens = `
   return (
     <Box
     width="100%"
-    height="100%"
+    height="80%"
     display="grid"
     gap="1.5rem"
     sx={
@@ -148,14 +178,14 @@ const gridTemplateSmallScreens = `
     <DashboardBox gridArea="form"
     width="100%"
     height="100%"
-    p="1rem"
+    p="2.5rem 0rem 0rem 0rem"
     mt="3rem"
     ml="0rem"
     overflow="hidden">
-       <Typography fontWeight="bold" fontSize="32px" color={palette.grey[400]} textAlign="center" mb="0.2rem">
+       <Typography fontWeight="bold" fontSize="32px" color={palette.grey[400]} textAlign="center" mb="0.3rem">
           Yönetici Ekleme Paneli
         </Typography>
-        <Typography fontWeight="bold" fontSize="11px" color={palette.grey[600]} textAlign="center" >
+        <Typography fontWeight="italic" fontSize="11px" color={palette.grey[700]} textAlign="center" >
         Bu alanda yönetici eklemek için bir form gönderebilir, yeni bir kullanıcı girişi sağlayabilirsiniz
         </Typography>
         
@@ -176,12 +206,8 @@ const gridTemplateSmallScreens = `
     >
       {({
         values,
-        errors,
-        touched,
-        handleBlur,
         handleChange,
         handleSubmit,
-        setFieldValue,
         resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
@@ -266,7 +292,7 @@ const gridTemplateSmallScreens = `
                 borderRadius:"50px",
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: palette.tertiary[500],
+                backgroundColor: palette.secondary[700],
                 color: palette.primary[600],
                 "&:hover": { color: palette.tertiary[500]},
               }}
@@ -300,16 +326,16 @@ const gridTemplateSmallScreens = `
  
     <DashboardBox gridArea="content
     "width="100%"
-    height="80%"
+    height="90%"
     p="1rem"
-    mt="6rem"
+    mt="5rem"
     overflow="hidden">
     <BoxHeader 
       title='Kayıtlı Kullanıcılar'
       sideText={`${transofrmedUserData?.length} Kullanıcı`}/>
        <Box
           mt="1.5rem"
-          height="100%"
+          height="70%"
           sx={{
             "& .MuiDataGrid-root": {
               color: palette.grey[300],
@@ -334,7 +360,70 @@ const gridTemplateSmallScreens = `
       hideFooter={true}
       rows={transofrmedUserData || []}
       columns={usersColumns}/>
+ </Box>
+ <Formik
+  onSubmit={handleDeleteUser}
+  initialValues={{ userEmail: '' }}
+  validationSchema={yup.object().shape({
+    userEmail: yup.string().email('Geçerli bir e-posta girin').required('E-posta zorunlu'),
+  })}
+>
+  {({ values, handleChange, handleSubmit }) => (
+    <form onSubmit={handleSubmit}>
+
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+
+
+      >
+        <TextField
+          type="email"
+          placeholder="Silinecek Kullanıcı E-postası"
+          name="userEmail"
+          value={values.userEmail}
+          onChange={handleChange}
+          
+          
+          sx={{
+            backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+            m: "2rem",
+            borderRadius:"5px",
+            width:"60%",
+
+          }}
+        />
+        <Button
+          type="submit"
+          sx={{
+            width: '20%',
+            borderRadius: '50px',
+            m: '2rem 0',
+            p: '1rem',
+            backgroundColor: palette.tertiary[500],
+            color: palette.primary[500],
+            '&:hover': { color: palette.tertiary[500] },
+          }}
+        >
+          {'SİL'}
+        </Button>
+        <Typography
+          onClick={() => handleDeleteUser(values, onSubmitProps)} // Eğer handleDeleteUser fonksiyonuna bir parametre gerekiyorsa values olarak kabul ediyorum.
+          sx={{
+            textDecoration: 'underline',
+            color: palette.primary[200],
+            '&:hover': {
+              cursor: 'pointer',
+              color: palette.primary[200],
+            },
+          }}
+        ></Typography>
       </Box>
+    </form>
+  )}
+</Formik>
+
     </DashboardBox> 
 </Box>
   );
