@@ -1,7 +1,7 @@
 import BoxHeader from '@/components/BoxHeader';
 import DashboardBox from '@/components/DashboardBox'
 import YearSelector from '@/components/yearSelector';
-import { useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query } from '@/state/api';
+import { useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetyirmiIkiTotalRevenueQuery, useGetyirmiUcTotalRevenueQuery} from '@/state/api';
 import { Typography, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react'
 import { AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis,  } from 'recharts';
@@ -18,13 +18,18 @@ function getMonthName(monthNumber) {
 const Row2 = () => {
   const { palette } = useTheme();
   const [selectedYear, setSelectedYear] = useState(2022);
-
   const handleYearSelect = (year) => {
     setSelectedYear(year);
   };
 
   const { data: monthlyData2022 } = useGetMonthlyProfit2022Query();
   const { data: monthlyData2023 } = useGetMonthlyProfit2023Query();
+  const { data: totalRevenue2022 } = useGetyirmiIkiTotalRevenueQuery();
+  const { data: totalRevenue2023 } = useGetyirmiUcTotalRevenueQuery();
+  
+  const increase = Math.round(((totalRevenue2023 - totalRevenue2022) / totalRevenue2022) * 100);
+
+
 
   const transformedMonthlyData = useMemo(() => {
     const monthlyData = selectedYear === 2022 ? monthlyData2022 : monthlyData2023;
@@ -47,18 +52,18 @@ const Row2 = () => {
     <YearSelector onSelectYear={handleYearSelect}></YearSelector>
     <BoxHeader 
     title='Aylara Göre Satış Toplamları' 
-    subtitle='Grafik Satışların Ay Bazlı Gruplanıp Toplanmasıyla Elde Ediliyor' 
-    sideText='0.24%'/>
+    subtitle='Grafik Satışların Ay Bazlı Gruplanıp Toplanmasıyla Elde Ediliyor'
+    sideText={`${increase}%`}/>
     <ResponsiveContainer width="100%" height="80%">
         <BarChart
           width={500}
           height={400}
           data={transformedMonthlyData}
           margin={{
-            top: 10,
-            right: 10,
-            left: 0,
-            bottom: 5,
+            top: 15,
+            right: 15,
+            left: 5,
+            bottom: 0,
           }}
         >
           <defs>
@@ -83,9 +88,9 @@ const Row2 = () => {
     
     <DashboardBox gridArea="b">
     <BoxHeader
-    title='Yılı  ' 
+    title={`${selectedYear} Yılı`}
     subtitle='Toplam Gelir ve Toplam Adetin Gösterimi' 
-    sideText='0.24%'/>
+/>
     <ResponsiveContainer width="100%" height="80%">
       
         <LineChart

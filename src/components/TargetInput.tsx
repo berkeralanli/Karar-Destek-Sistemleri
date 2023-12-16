@@ -29,7 +29,7 @@ const RevenueTargetInput = ({ onSubmit }) => {
           borderRadius: '4px',
           border: '1px solid #ccc',
           fontSize: '12px',
-          width:'100px'
+          width:'120px'
         }}
       />
       <button
@@ -37,7 +37,7 @@ const RevenueTargetInput = ({ onSubmit }) => {
         style={{
           
           margin: '0.5rem',
-          padding: '5px 10px',
+          padding: '5px 15px',
           borderRadius: '6px',
           backgroundColor: palette.tertiary[500],
           border: '1px solid #ccc',

@@ -12,7 +12,7 @@ const YearSelector = ({ onSelectYear }) => {
       <select onChange={handleChange}
         style={{
           marginRight:'0.5rem',
-          marginBottom: '-0.5rem',
+          marginBottom: '-1rem',
           marginTop: '0.5rem',
           padding: '5px',
           borderRadius: '4px',

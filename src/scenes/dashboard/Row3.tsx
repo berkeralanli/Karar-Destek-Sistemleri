@@ -62,8 +62,7 @@ const Row3 = () => {
   const formattedRemaining = new Intl.NumberFormat('tr-TR').format(remaining);
     const widthPercentage = `${percentageOfRevenue}%`;
     const managementSupportText = `
-     Şirketin hedefi ₺${target.toLocaleString("tr-TR")}. Şu ana kadar ulaşılan ciro ₺${formattedTotalRevenue}. Şirketin hedef ciroya ulaşması için geriye sadece ₺${formattedRemaining} kaldı. Hedefler, şirketin büyümesine yol açar ve odaklanmayı sağlar.
-    Yönetim olarak hedeflere ulaşmak için çalışmaya devam ediyoruz.
+    Hedef, şirketin gelecekteki başarılarına odaklanmamızı sağlar ve ilerlememizi ölçmemize yardımcı olur. Şirketin hedefi ₺${target.toLocaleString("tr-TR")}. Şu ana kadar elde edilen ciro ₺${formattedTotalRevenue}, yani hedefe ulaşmak için ₺${formattedRemaining}'ye ihtiyaç var.  Hedefler, şirketin büyümesini sağlayarak motivasyon kaynağı olur. Yönetim olarak, hedeflere ulaşmak için kararlılıkla çalışmaya devam ediyoruz. 
   `;
 
 
@@ -197,9 +196,9 @@ const Row3 = () => {
       subtitle=' Detaylı Müşteri Analizi ve Favori ürünü '
       sideText={`${transformedDataMostBuyers?.length} Müşteri`}/>
        <Box
-          mt="1.5rem"
+          mt="1rem"
           p="0 0.5rem"
-          height={240}
+          height={230}
           sx={{
             "& .MuiDataGrid-root": {
               color: palette.grey[300],
@@ -228,37 +227,37 @@ const Row3 = () => {
     </DashboardBox>
 
     <DashboardBox gridArea="i">
+      
     <BoxHeader 
       title="Ciro Hedefi Belirleme"
       subtitle='Aktif Olarak Hedef Cironun Belirlenmesi ve Günümüz Cirosu ile Karşılaştırılması '
       sideText={`İlerleme ${widthPercentage} `}/>
       <Box
       
-      height="15px"
-      margin="1.25rem 1rem 0.4rem 1rem"
+      height="20px"
+      margin="2rem 1rem 0.4rem 1rem"
       bgcolor={palette.primary[800]}
       borderRadius="1rem"
       >
         <Box
-      height="15px"
+      height="20px"
       bgcolor={palette.primary[600]}
       borderRadius="1rem"
       width={widthPercentage}
       >
       </Box>
       </Box>
-      <Typography margin="0 1rem" variant="h6">
+      <Typography margin="1.25rem 1rem" variant="h6">
       {managementSupportText}
       </Typography>
       <RevenueTargetInput onSubmit={handleTargetSubmit} />
     </DashboardBox>
 
     <DashboardBox gridArea="j">
-    <BoxHeader 
-      title="Ülkelerin Satış Ağırlıkları" 
-      subtitle='En Yoğun Sipariş Alan 3 Ülke' 
-      sideText='0.24%'
-    />
+    <Box m="0.5rem -0.5rem" flexBasis={"40%"} textAlign={"center"}>
+        <Typography variant="h4">Ülkelerin Satış Ağırlıkları</Typography>
+        <Typography mt="0.25rem" variant="h6">En Yoğun Sipariş Alan 3 Ülke</Typography>
+ </Box>
     <FlexBetween mt="0.5rem" gap="0.5rem" p="0 1rem" textAlign="center">
       {countriesData.map((country, index) => (
         <div key={index}>

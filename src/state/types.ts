@@ -67,3 +67,15 @@ export interface getUserResponse{
   email: string;
   password: number; 
 }
+export interface getyirmiIkiTotalRevenueResponse{
+  totalRevenue: number,
+}
+export interface getyirmiUcTotalRevenueResponse{
+  totalRevenue: number,
+}
+export interface getyirmiIkiTotalQuantityResponse{
+  totalQuantity: number,
+}
+export interface getyirmiUcTotalQuantityResponse{
+  totalQuantity: number,
+}

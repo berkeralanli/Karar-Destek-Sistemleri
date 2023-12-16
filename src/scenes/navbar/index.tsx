@@ -1,14 +1,21 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
-import { Box, Typography, useTheme } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import FlexBetween from '@/components/FlexBetween';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { palette } = useTheme(); 
   const [selected, setSelected] = useState("dashboard");
   const location = useLocation();
   const isLoginPage = location.pathname === '/';
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   if (isLoginPage) {
     // Login sayfasındaysanız Navbar'ı göstermeyin
@@ -68,6 +75,21 @@ const Navbar = () => {
             kullanıcı
           </Link>
         </Box>
+     
+           <LogoutIcon to="/"
+          onClick={handleLogout}
+          style={{
+            color: "inherit",
+            textDecoration: "inherit",
+            fontSize:"medium",
+            "&:hover": {
+              color: palette.primary[100]
+            },
+            
+          }}>
+            </LogoutIcon>
+          
+      
       </FlexBetween>
     </FlexBetween>
   );

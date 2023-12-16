@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse, getMostSellers2022Response, GetMostSellers2023Response, GetMonthlyProfit2023Response, GetBestSellersAllResponse, GetMostSellersCountryResponse, getMonthlyProfitAllYearsResponse, getUserResponse} from "./types";
+import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse, getMostSellers2022Response, GetMostSellers2023Response, GetMonthlyProfit2023Response, GetBestSellersAllResponse, GetMostSellersCountryResponse, getMonthlyProfitAllYearsResponse, getUserResponse, GetyirmiIkiTotalRevenueResponse, GetyirmiUcTotalRevenueResponse, getyirmiIkiTotalQuantityResponse, getyirmiUcTotalQuantityResponse } from "./types";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
@@ -50,9 +50,25 @@ export const api = createApi({
       query: () => "users", 
       providesTags: ["users"],
     }),
+    getyirmiIkiTotalRevenue: build.query<Array<GetyirmiIkiTotalRevenueResponse>, void>({
+      query: () => "yirmiIkiTotalRevenueKpi/yirmiIkiTotalRevenue", 
+      providesTags: ["yirmiIkiTotalRevenue"],
+    }),
+    getyirmiUcTotalRevenue: build.query<Array<GetyirmiUcTotalRevenueResponse>, void>({
+      query: () => "yirmiUcTotalRevenueKpi/yirmiUcTotalRevenue", 
+      providesTags: ["yirmiUcTotalRevenue"],
+    }),
+    getyirmiUcTotalQuantity: build.query<Array<GetyirmiUcTotalQuantityResponse>, void>({
+      query: () => "yirmiUcTotalQuantityKpi/yirmiUcTotalQuantity", 
+      providesTags: ["yirmiUcTotalQuantity"],
+    }),
+    getyirmiIkiTotalQuantity: build.query<Array<GetyirmiIkiTotalQuantityResponse>, void>({
+      query: () => "yirmiIkiTotalQuantityKpi/yirmiIkiTotalQuantity", 
+      providesTags: ["yirmiIkiTotalQuantity"],
+    }),
   }),
 });
 
-export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery, useGetMostBuyingCustomersQuery, useGetTotalRevenueQuery, useGetMonthlyProfitAllYearsQuery, useGetUserQuery} = api;
+export const { useGetKpisQuery, useGetMostSellers2022Query, useGetMostSellers2023Query, useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetBestSellersAllQuery, useGetMostSellersCountryQuery, useGetMostBuyingCustomersQuery, useGetTotalRevenueQuery, useGetMonthlyProfitAllYearsQuery, useGetUserQuery, useGetyirmiIkiTotalRevenueQuery, useGetyirmiUcTotalRevenueQuery,useGetyirmiUcTotalQuantityQuery, useGetyirmiIkiTotalQuantityQuery} = api;
 
 
