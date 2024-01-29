@@ -1,1 +1,1 @@
-* MERN Finance Dashboard App -  React, Vite,  Material UI, ReCharts, Nodejs, Express, Token, MongoDB, Redux Toolkit 
+MERN Finance Dashboard App -  React, Vite,  Material UI, ReCharts, Nodejs, Express, Token, MongoDB, Redux Toolkit 
