@@ -2,9 +2,9 @@ import BoxHeader from '@/components/BoxHeader';
 import DashboardBox from '@/components/DashboardBox'
 import YearSelector from '@/components/yearSelector';
 import { useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetyirmiIkiTotalRevenueQuery, useGetyirmiUcTotalRevenueQuery} from '@/state/api';
-import { Typography, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { useMemo, useState } from 'react'
-import { AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis,  } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 
 type Props = {}
 function getMonthName(monthNumber) {

@@ -121,7 +121,7 @@ const LoginPage = () => {
                 color: palette.background.alt,
                 "&:hover": { color: palette.primary.main },
               }}>
-            Login
+            Giriş
           </Button>
         </form>
       </Box>

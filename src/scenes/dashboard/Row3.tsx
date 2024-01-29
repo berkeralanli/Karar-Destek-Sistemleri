@@ -98,6 +98,11 @@ const Row3 = () => {
 
     const productColumns = [
       {
+        field:"id",
+        headerName: "id",
+        flex: 0.5,
+    },
+      {
       
         field: "isim",
         headerName: "Ürün",
@@ -108,6 +113,7 @@ const Row3 = () => {
         headerName: "Adet",
         flex: 0.5,
     },
+
       
       {
         field: "Fiyat",
