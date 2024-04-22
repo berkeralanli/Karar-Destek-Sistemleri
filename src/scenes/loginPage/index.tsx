@@ -15,7 +15,7 @@ const LoginPage = () => {
     password: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -23,7 +23,7 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:1337/login", {
@@ -118,7 +118,7 @@ const LoginPage = () => {
           <Button  variant="contained" color="primary" type="submit"  sx={{
                 mt: "1rem",
                 backgroundColor: palette.tertiary[500],
-                color: palette.background.alt,
+                color: palette.background,
                 "&:hover": { color: palette.primary.main },
               }}>
             Giriş

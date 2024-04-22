@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from 'react';
-import BoxHeader from '@/components/BoxHeader';
+import { useMemo, useState } from 'react';
 import DashboardBox from '@/components/DashboardBox';
 import FlexBetween from '@/components/FlexBetween';
 import { useGetMonthlyProfitAllYearsQuery } from '@/state/api';
@@ -7,8 +6,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import RevenueTargetInput from '../../components/revenueTargetInput';
 import { Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-//
-function getMonthName(monthNumber) {
+function getMonthName(monthNumber: number): string {
   const monthNames = [
     "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
     "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
@@ -16,7 +14,10 @@ function getMonthName(monthNumber) {
   return monthNames[monthNumber - 1];
 }
 
-const calculateWeightedRevenue = (monthlyData, growthExpectation, totalRevenue) => {
+const calculateWeightedRevenue = (
+  monthlyData: Array<{ month: number; totalRevenue: number }>, 
+  growthExpectation: number
+) => {
   const weights = [0.08, 0.07, 0.07, 0.06, 0.07, 0.06, 0.08, 0.07, 0.12, 0.07, 0.14, 0.10];
   const growthFactor = growthExpectation / 100;
   const growthAdjustedRevenue = (8664883 * (1 + growthFactor));
@@ -32,34 +33,31 @@ const calculateWeightedRevenue = (monthlyData, growthExpectation, totalRevenue) 
   return weightedRevenue;
 };
 const Tahminleme = () => {  
-  const totalRevenue = 8664883
+
   const { palette } = useTheme();
-  const [isPredictions, setIsPredictions] = useState(false);
   const { data: monthlyProfitAllYears } = useGetMonthlyProfitAllYearsQuery();
-  const [weightedData, setWeightedData] = useState([]);
-  const [dollarWeightedData, setDollarWeightedData] = useState([]);
+  const [weightedData, setWeightedData] = useState<Array<{ Ay: string; sonYilGelirleri: number; gelecekYilGelirleri: number; }>>([]);
+  const [dollarWeightedData, setDollarWeightedData] = useState<Array<{
+    gelecekYilGelirleriDolar: number;
+    Ay: string;
+    sonYilGelirleri: number;
+    gelecekYilGelirleri: number;
+  }> >([]);
   
 
-  const handleRevenueTargetSubmit = (growth, exchangeRate) => {
-    const totalRevenueValue = totalRevenue?.value ?? 0;
-    const weightedRevenue = calculateWeightedRevenue(
-      monthlyProfitAllYears,
-      growth,
-      totalRevenue
-    );
-  
-    setWeightedData(weightedRevenue);
-  
-    const dollarWeightedData = weightedRevenue.map((item) => ({
-      ...item,
-      gelecekYilGelirleriDolar: Math.round(item.gelecekYilGelirleri / exchangeRate),
-    }));
-  
-    setDollarWeightedData(dollarWeightedData); // Yeni hesaplanan dolar cinsinden ağırlıklı gelir verisi
-  
-    console.log(`Büyüme Beklentisi: ${growth}, Dolar Kuru Beklentisi: ${exchangeRate}`);
-    console.log('Aylık Ağırlıklı Gelir Verisi:', weightedRevenue);
-    console.log('Aylık Ağırlıklı Gelir Verisi (Dolar cinsinden):', dollarWeightedData);
+  const handleRevenueTargetSubmit = (growth: number, exchangeRate: number) => {
+    if (monthlyProfitAllYears) {
+      const weightedRevenue = calculateWeightedRevenue(monthlyProfitAllYears, growth);
+    
+      setWeightedData(weightedRevenue);
+    
+      const dollarWeightedData = weightedRevenue.map((item) => ({
+        ...item,
+        gelecekYilGelirleriDolar: Math.round(item.gelecekYilGelirleri / exchangeRate),
+      }));
+    
+      setDollarWeightedData(dollarWeightedData);
+    }
   };
 
   const transformedAllMonthlyData = useMemo(() => {

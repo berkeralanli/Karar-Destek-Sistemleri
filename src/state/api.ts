@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse, getMostSellers2022Response, GetMostSellers2023Response, GetMonthlyProfit2023Response, GetBestSellersAllResponse, GetMostSellersCountryResponse, getMonthlyProfitAllYearsResponse, getUserResponse, GetyirmiIkiTotalRevenueResponse, GetyirmiUcTotalRevenueResponse, getyirmiIkiTotalQuantityResponse, getyirmiUcTotalQuantityResponse } from "./types";
+import { GetKpisResponse, GetMonthlyProfit2022Response, GetMostBuyingCustomersResponse, GetTotalRevenueResponse, getMostSellers2022Response, GetMostSellers2023Response, GetMonthlyProfit2023Response, GetBestSellersAllResponse, GetMostSellersCountryResponse, getMonthlyProfitAllYearsResponse, getUserResponse, getyirmiIkiTotalRevenueResponse, getyirmiUcTotalRevenueResponse, getyirmiIkiTotalQuantityResponse, getyirmiUcTotalQuantityResponse } from "./types";
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
   reducerPath: "main",
-  tagTypes: ["Kpis"],
+  tagTypes: ["Kpis","mostSellers2022","MostSellers2023","monthlyProfit2022","monthlyProfit2023","bestSellersAll","mostSellersCountry","mostBuyingCustomers","TotalRevenue","monthlyProfitAllYears","users","yirmiIkiTotalRevenue","yirmiUcTotalRevenue","yirmiUcTotalQuantity","yirmiIkiTotalQuantity"],
   endpoints: (build) => ({
     getKpis: build.query<Array<GetKpisResponse>, void>({
       query: () => "kpi/kpis/",
@@ -50,19 +50,19 @@ export const api = createApi({
       query: () => "users", 
       providesTags: ["users"],
     }),
-    getyirmiIkiTotalRevenue: build.query<Array<GetyirmiIkiTotalRevenueResponse>, void>({
+    getyirmiIkiTotalRevenue: build.query<Array<getyirmiIkiTotalRevenueResponse>, void>({
       query: () => "yirmiIkiTotalRevenueKpi/yirmiIkiTotalRevenue", 
       providesTags: ["yirmiIkiTotalRevenue"],
     }),
-    getyirmiUcTotalRevenue: build.query<Array<GetyirmiUcTotalRevenueResponse>, void>({
+    getyirmiUcTotalRevenue: build.query<Array<getyirmiUcTotalRevenueResponse>, void>({
       query: () => "yirmiUcTotalRevenueKpi/yirmiUcTotalRevenue", 
       providesTags: ["yirmiUcTotalRevenue"],
     }),
-    getyirmiUcTotalQuantity: build.query<Array<GetyirmiUcTotalQuantityResponse>, void>({
+    getyirmiUcTotalQuantity: build.query<Array<getyirmiUcTotalQuantityResponse>, void>({
       query: () => "yirmiUcTotalQuantityKpi/yirmiUcTotalQuantity", 
       providesTags: ["yirmiUcTotalQuantity"],
     }),
-    getyirmiIkiTotalQuantity: build.query<Array<GetyirmiIkiTotalQuantityResponse>, void>({
+    getyirmiIkiTotalQuantity: build.query<Array<getyirmiIkiTotalQuantityResponse>, void>({
       query: () => "yirmiIkiTotalQuantityKpi/yirmiIkiTotalQuantity", 
       providesTags: ["yirmiIkiTotalQuantity"],
     }),

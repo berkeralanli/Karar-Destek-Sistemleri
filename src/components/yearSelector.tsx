@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
-const YearSelector = ({ onSelectYear }) => {
-  const handleChange = (event) => {
+interface YearSelectorProps {
+  onSelectYear: (year: number) => void;
+}
+
+const YearSelector: React.FC<YearSelectorProps> = ({ onSelectYear }) => { 
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => { 
     const year = parseInt(event.target.value);
     onSelectYear(year);
   };

@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { useTheme } from '@mui/material';
 
-const RevenueTargetInput = ({ onSubmit }) => {
-  const [growthExpectation, setGrowthExpectation] = useState('');
-  const [exchangeRateExpectation, setExchangeRateExpectation] = useState('');
+interface RevenueTargetInputProps {
+  onSubmit: (growth: number, exchangeRate: number) => void; // 
+}
+
+const RevenueTargetInput: React.FC<RevenueTargetInputProps> = ({ onSubmit }) => { 
+  const [growthExpectation, setGrowthExpectation] = useState<string>(''); 
+  const [exchangeRateExpectation, setExchangeRateExpectation] = useState<string>('');
   const { palette } = useTheme();
 
-  const handleGrowthChange = (event) => {
+  const handleGrowthChange = (event: ChangeEvent<HTMLInputElement>) => { 
     setGrowthExpectation(event.target.value);
   };
 
-  const handleExchangeRateChange = (event) => {
+  const handleExchangeRateChange = (event: ChangeEvent<HTMLInputElement>) => { 
     setExchangeRateExpectation(event.target.value);
   };
 

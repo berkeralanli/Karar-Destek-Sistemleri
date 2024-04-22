@@ -1,19 +1,19 @@
 import { useTheme } from '@mui/material';
 import React, { useState } from 'react';
 
-const RevenueTargetInput = ({ onSubmit }) => {
-  const [targetRevenue, setTargetRevenue] = useState('');
-  const { palette } = useTheme();
-  const handleInputChange = (event) => {
-    setTargetRevenue(event.target.value);
-  };
+  const RevenueTargetInput = ({ onSubmit }: { onSubmit: (targetRevenue: number) => void }) => {
+    const [targetRevenue, setTargetRevenue] = useState<number>(0);
+    const { palette } = useTheme();
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = parseFloat(event.target.value); 
+      setTargetRevenue(isNaN(value) ? 0 : value); 
+    };
+  
 
-  const handleSubmit = () => {
-    if (targetRevenue) {
-      onSubmit(parseInt(targetRevenue));
-      setTargetRevenue(''); // Inputu temizle
-    }
-  };
+    const handleSubmit = () => {
+      onSubmit(targetRevenue);
+    };
+  
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

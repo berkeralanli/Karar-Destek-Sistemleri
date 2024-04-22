@@ -3,11 +3,10 @@ import DashboardBox from '@/components/DashboardBox'
 import YearSelector from '@/components/yearSelector';
 import { useGetMonthlyProfit2022Query, useGetMonthlyProfit2023Query, useGetyirmiIkiTotalRevenueQuery, useGetyirmiUcTotalRevenueQuery} from '@/state/api';
 import { useTheme } from '@mui/material';
-import { useMemo, useState } from 'react'
+import { SetStateAction, useMemo, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
 
-type Props = {}
-function getMonthName(monthNumber) {
+function getMonthName(monthNumber: number) {
   const monthNames = [
     "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
     "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
@@ -18,16 +17,25 @@ function getMonthName(monthNumber) {
 const Row2 = () => {
   const { palette } = useTheme();
   const [selectedYear, setSelectedYear] = useState(2022);
-  const handleYearSelect = (year) => {
+  const handleYearSelect = (year: SetStateAction<number>) => {
     setSelectedYear(year);
   };
 
+  
   const { data: monthlyData2022 } = useGetMonthlyProfit2022Query();
   const { data: monthlyData2023 } = useGetMonthlyProfit2023Query();
-  const { data: totalRevenue2022 } = useGetyirmiIkiTotalRevenueQuery();
-  const { data: totalRevenue2023 } = useGetyirmiUcTotalRevenueQuery();
+  const { data: totalRevenue2022 = { totalRevenue: 0 } } = useGetyirmiIkiTotalRevenueQuery();
+  const { data: totalRevenue2023 = { totalRevenue: 0 } } = useGetyirmiUcTotalRevenueQuery();
   
-  const increase = Math.round(((totalRevenue2023 - totalRevenue2022) / totalRevenue2022) * 100);
+  
+  let increase: number | null = null;
+
+    if (totalRevenue2022 && totalRevenue2023 && typeof totalRevenue2022 === 'number' && typeof totalRevenue2023 === 'number') {
+      const increaseValue = Math.round(((totalRevenue2023 - totalRevenue2022) / totalRevenue2022) * 100);
+      increase = isNaN(increaseValue) ? null : increaseValue;
+    } else {
+      console.error('Toplam gelir henüz elde edilemedi');
+}
 
 
 
@@ -38,13 +46,14 @@ const Row2 = () => {
       return monthlyData.map((item) => ({
         Ay: getMonthName(item.month).substring(0, 3),
         ToplamGelir: item.totalRevenue,
-        ToplamAdet: item.totalQuantity.toLocaleString("tr-TR"),
+        ToplamAdet: item.totalQuantity ? item.totalQuantity.toLocaleString("tr-TR") : 0,
         islemDegeri: Number((item.totalRevenue / item.totalQuantity).toFixed(2)),
       }));
     }
     
     return [];
   }, [monthlyData2022, monthlyData2023, selectedYear]);
+  
   
   return (
     <>
@@ -88,9 +97,8 @@ const Row2 = () => {
     
     <DashboardBox gridArea="b">
     <BoxHeader
-    title={`${selectedYear} Yılı`}
-    subtitle='Toplam Gelir ve Toplam Adetin Gösterimi' 
-/>
+          title={`${selectedYear} Yılı`}
+          subtitle='Toplam Gelir ve Toplam Adetin Gösterimi' sideText={''}/>
     <ResponsiveContainer width="100%" height="80%">
       
         <LineChart

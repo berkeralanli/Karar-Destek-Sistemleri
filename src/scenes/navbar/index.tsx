@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import FlexBetween from '@/components/FlexBetween';
 
 const Navbar = () => {
@@ -82,10 +82,6 @@ const Navbar = () => {
             color: "inherit",
             textDecoration: "inherit",
             fontSize:"medium",
-            "&:hover": {
-              color: palette.primary[100]
-            },
-            
           }}>
             </LogoutIcon>
           

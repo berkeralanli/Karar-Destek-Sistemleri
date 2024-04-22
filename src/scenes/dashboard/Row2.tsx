@@ -1,86 +1,57 @@
 import DashboardBox from '@/components/DashboardBox';
-import Boxheader from '@/components/BoxHeader';
 import  { useGetMostSellers2022Query, useGetMostSellers2023Query, useGetyirmiIkiTotalRevenueQuery, useGetyirmiUcTotalRevenueQuery, useGetyirmiIkiTotalQuantityQuery, useGetyirmiUcTotalQuantityQuery } from '@/state/api';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import FlexBetween from '@/components/FlexBetween';
 import BoxHeader from '@/components/BoxHeader';
+import { getMostSellers2022Response, GetMostSellers2023Response } from '@/state/types';
 
 const pieData = [
   {name: "2023", value: 620},
   {name: "2022", value: 480},
  
 ]
-type Props = {}
 
 const Row1 = () => {
-
   const { palette } = useTheme();
   const pieColors = [palette.primary[600], palette.primary[800]];
 
   const { data: data2022 } = useGetMostSellers2022Query();
   const { data: data2023 } = useGetMostSellers2023Query();
-  const { data: totalRevenue2022 } = useGetyirmiIkiTotalRevenueQuery();
-  const { data: totalRevenue2023 } = useGetyirmiUcTotalRevenueQuery();
-  const { data: totalQuantity2022 } = useGetyirmiIkiTotalQuantityQuery();
-  const { data: totalQuantity2023 } = useGetyirmiUcTotalQuantityQuery();
+  const { data: totalRevenue2022 = { totalRevenue: 0 } } = useGetyirmiIkiTotalRevenueQuery();
+  const { data: totalRevenue2023 = { totalRevenue: 0 } } = useGetyirmiUcTotalRevenueQuery();
+  const { data: totalQuantity2022 = { totalQuantity: 0 } } = useGetyirmiIkiTotalQuantityQuery();
+  const { data: totalQuantity2023 = { totalQuantity: 0 } } = useGetyirmiUcTotalQuantityQuery();
 
-
-  const totalRevenue2022Rounded = Math.round(totalRevenue2022);
-  const totalRevenue2023Rounded = Math.round(totalRevenue2023);
-  const increase = Math.round(((totalRevenue2023 - totalRevenue2022) / totalRevenue2022) * 100);
-  const increaseTotalQuantity = Math.round(((totalQuantity2023 - totalQuantity2022) / totalQuantity2022) * 100);
-  console.log("🚀 ~ file: Row2.tsx:34 ~ Row1 ~ increaseTotalQuantity:", increaseTotalQuantity)
-  const firstItemOfData2022 = data2022 && data2022.length > 0 ? data2022[0] : null;
-  const firstItemOfData2023 = data2023 && data2023.length > 0 ? data2023[0] : null;
-  
-  const getTransformedFirstItems = () => {
-    let transformedFirstItem2022 = null;
-    let transformedFirstItem2023 = null;
-  
-    if (firstItemOfData2022) {
-      transformedFirstItem2022 = {
-        id: firstItemOfData2022._id,
-        name: firstItemOfData2022.ProductDescription,
-        Gelir: firstItemOfData2022.totalRevenue,
-        Adet: firstItemOfData2022.totalQuantity,
-      };
-
-    }
-  
-    if (firstItemOfData2023) {
-      transformedFirstItem2023 = {
-        id: firstItemOfData2023._id,
-        name: firstItemOfData2023.ProductDescription,
-        Gelir: firstItemOfData2023.totalRevenue,
-        Adet: firstItemOfData2023.totalQuantity,
-      };
-
-    }
-  
-    return { transformedFirstItem2022, transformedFirstItem2023 };
-  };
-  
-  const { transformedFirstItem2022, transformedFirstItem2023 } = getTransformedFirstItems();
-  
-  const gelir2022 = transformedFirstItem2022?.Gelir;
-  const gelir2023 = transformedFirstItem2023?.Gelir;
-  const adet2022 = transformedFirstItem2022?.Adet;
-  const adet2023 = transformedFirstItem2023?.Adet;
+  let increase: number | null = null;
+  let increaseTotalQuantity: number | null = null;
+  let increaseProducts: number | null = null;
   
 
+  if (
+    typeof totalRevenue2022 === 'number' &&
+    typeof totalRevenue2023 === 'number' &&
+    typeof totalQuantity2022 === 'number' &&
+    typeof totalQuantity2023 === 'number' &&
+    Array.isArray(data2022) &&
+    Array.isArray(data2023) &&
+    data2022.every((item:getMostSellers2022Response ) => typeof item.totalRevenue === 'number' && typeof item.totalQuantity === 'number') &&
+    data2023.every((item:GetMostSellers2023Response ) => typeof item.totalRevenue === 'number' && typeof item.totalQuantity === 'number')
+  ) {
+    increase = Math.round(((totalRevenue2023 - totalRevenue2022) / totalRevenue2022) * 100);
+    increaseTotalQuantity = Math.round(((totalQuantity2023 - totalQuantity2022) / totalQuantity2022) * 100);
+    const gelir2022 = data2022?.[0]?.totalRevenue ?? 0;
+    const gelir2023 = data2023?.[0]?.totalRevenue ?? 0;
+    increaseProducts = Math.round(((gelir2023 - gelir2022) / gelir2022) * 100);
+  } else {
+    console.error('Toplam gelir veya toplam miktar henüz elde edilemedi');
+  }
 
-
-  // 2023 en cok satan urun ile 2023 en cok satan urun arasindaki gelir % farki
-  const increaseProducts = Math.round(((gelir2023 - gelir2022) / gelir2022) * 100);
-  const increaseQuantity = Math.round(((adet2023 - adet2022) / adet2022) * 100);
-
-  
   const transformedData2022 = useMemo(() => {
     if (data2022) {
       return data2022.map((item) => ({
-        id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
+        id: item.__id,
         name: item.ProductDescription.length > 10 ? item.ProductDescription.slice(0, 10) + '...' : item.ProductDescription,
         Gelir: item.totalRevenue,
         Adet: item.totalQuantity,
@@ -92,7 +63,7 @@ const Row1 = () => {
   const transformedData2023 = useMemo(() => {
     if (data2023) {
       return data2023.map((item) => ({
-        id: item._id, // Örnek olarak _id kullanıldı, gerçek verilere göre düzenlenmeli
+        id: item.__id,
         name: item.ProductDescription.length > 1 ? item.ProductDescription.slice(0, 10) + '...' : item.ProductDescription,
         Gelir: item.totalRevenue,
         Adet: item.totalQuantity,
@@ -105,9 +76,8 @@ const Row1 = () => {
     <>
     <DashboardBox gridArea="d" >
     <BoxHeader
-    title='2022 Yılı' 
-    subtitle='En Çok Satış Yapılan 5 ürün'
-/>
+          title='2022 Yılı'
+          subtitle='En Çok Satış Yapılan 5 ürün' sideText={''}/>
     <ResponsiveContainer width="100%" height="80%">
       
         <AreaChart
@@ -236,8 +206,8 @@ const Row1 = () => {
 
           <Typography variant="h5"> Gelir Değişimi</Typography>
           <Typography m="0.5rem 0 " variant="h3" color={palette.primary[300]}>{`${increase}%`}</Typography>
-          <Typography variant="h6">2023 Cirosu: ₺{totalRevenue2023Rounded?.toLocaleString("tr-TR")}.</Typography>
-          <Typography m="0.5rem 0"variant="h6">2022 Cirosu: ₺{totalRevenue2022Rounded?.toLocaleString("tr-TR")}.</Typography>
+          <Typography variant="h6">2023 Cirosu: ₺{totalRevenue2023?.toLocaleString("tr-TR")}.</Typography>
+          <Typography m="0.5rem 0"variant="h6">2022 Cirosu: ₺{totalRevenue2022?.toLocaleString("tr-TR")}.</Typography>
          
         </Box>
         <PieChart 
@@ -258,7 +228,7 @@ const Row1 = () => {
           paddingAngle={2} 
           dataKey="value"
         >
-          {pieData.map((entry, index) => (
+          {pieData.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={pieColors[index]} />
           ))}
         </Pie>
@@ -269,11 +239,6 @@ const Row1 = () => {
           <Typography m="0.5rem 0 " variant="h3" color={palette.primary[300]}>{`${increaseTotalQuantity}%`}</Typography>
           <Typography variant="h6">2023 Miktarı: {totalQuantity2023?.toLocaleString("tr-TR")}.</Typography>
           <Typography m="0.5rem 0"variant="h6">2022 Miktarı: {totalQuantity2022?.toLocaleString("tr-TR")}.</Typography>
-          
-          {/* <Typography variant="h5">Toplam Satış Farkı</Typography>
-          <Typography variant="h6">Satılan adette değişim {increaseTotalQuantity?.toLocaleString("tr-TR")}%.</Typography>
-          <Typography m="0.4rem" variant="h5"> Ciro karşılaştırması </Typography>
-          <Typography variant="h6">Kar oranı %{increaseProducts?.toLocaleString("tr-TR")}'a kadar çıkmıştır.</Typography> */}
 
         </Box>
         

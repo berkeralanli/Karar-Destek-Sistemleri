@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { Box, Button, TextField, Typography, useTheme, useMediaQuery, ButtonBase } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
 import DashboardBox from "@/components/DashboardBox";
 import FlexBetween from "@/components/FlexBetween";
 import BoxHeader from "@/components/BoxHeader";
@@ -67,11 +67,11 @@ const gridTemplateSmallScreens = `
   "content"
   "content"
 `;
-  const [userEmail, setUserEmail] = useState('');
-  const [pageType, setPageType] = useState("register");
+
+  const [setPageType] = useState("register");
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const handleDeleteUser = async (values, onSubmitProps) => {
+  const handleDeleteUser = async (values: { userEmail: unknown; }) => {
     try {
       // Burada inputtan alınan e-posta adresini state üzerinden alabilirsin
       const userEmail = values.userEmail;
@@ -98,10 +98,10 @@ const gridTemplateSmallScreens = `
         alert("Kullanıcı silinirken bir hata oluştu");
       }
     } catch (error) {
-      alert("Kullanıcı silinirken bir hata oluştu:", error);
+      alert("Kullanıcı silinirken bir hata oluştu:");
     }
   };
-  const register = async (values, onSubmitProps) => {
+  const register = async (values: { firstName: unknown; lastName: unknown; email: unknown; password: unknown; }, onSubmitProps: { resetForm: () => void; }) => {
     try {
       const userData = {
         firstName: values.firstName,
@@ -130,7 +130,7 @@ const gridTemplateSmallScreens = `
         alert('Yeni Kayıt Başarıyla Gerçekleşti');
       }
     } catch (error) {
-      alert("Kayıt sırasında hata:", error);
+      alert("Kayıt sırasında hata:");
 
     }
   };
@@ -409,7 +409,7 @@ const gridTemplateSmallScreens = `
           {'SİL'}
         </Button>
         <Typography
-          onClick={() => handleDeleteUser(values, onSubmitProps)} // Eğer handleDeleteUser fonksiyonuna bir parametre gerekiyorsa values olarak kabul ediyorum.
+          onClick={() => handleDeleteUser(values)} // Eğer handleDeleteUser fonksiyonuna bir parametre gerekiyorsa values olarak kabul ediyorum.
           sx={{
             textDecoration: 'underline',
             color: palette.primary[200],

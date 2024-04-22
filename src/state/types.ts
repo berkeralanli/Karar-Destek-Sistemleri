@@ -14,30 +14,33 @@ export interface GetKpisResponse{
 
 export interface getMostSellers2022Response{
   __id: string;
-  TotalQuantity: number;
+  totalQuantity: number;
   totalRevenue: number;
-  Description: string;
+  ProductDescription: string;
 }
 
 export interface GetMostSellers2023Response{
   __id: string;
-  TotalQuantity: number;
+  totalQuantity: number;
   totalRevenue: number;
-  Description: string;
+  ProductDescription: string;
 }
 
 export interface GetMonthlyProfit2022Response{
-  TotalQuantity: number;
+  month: number;
+  totalQuantity: number;
   totalRevenue: number;
   Description: string;
 }
 export interface GetMonthlyProfit2023Response{
   month: number;
   totalRevenue: number;
+  totalQuantity: number;
+  Description: string;
 }
 export interface GetBestSellersAllResponse{
   _id: string;
-  TotalQuantity: number;
+  totalQuantity: number;
   totalRevenue: number;
   ProductDescription: string;
   ProductPrice: number; 
@@ -48,9 +51,10 @@ export interface GetMostSellersCountryResponse{
 }
 export interface GetMostBuyingCustomersResponse{
   _id: string;
-  TotalQuantity: number;
+  totalQuantity: number;
   totalRevenue: number;
-  ProductPrice: string; 
+  ProductPrice: string;
+  mostBoughtProduct: string;
 }
 export interface GetTotalRevenueResponse{
   totalRevenue: number;
@@ -65,7 +69,7 @@ export interface getUserResponse{
   firstName: string;
   lastName: string;
   email: string;
-  password: number; 
+  password: string; 
 }
 export interface getyirmiIkiTotalRevenueResponse{
   totalRevenue: number,
@@ -78,4 +82,5 @@ export interface getyirmiIkiTotalQuantityResponse{
 }
 export interface getyirmiUcTotalQuantityResponse{
   totalQuantity: number,
+
 }

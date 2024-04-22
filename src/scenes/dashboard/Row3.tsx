@@ -8,7 +8,6 @@ import React, { useMemo, useState } from 'react';
 import RevenueTargetInput from '@/components/TargetInput'; 
 import {  Cell, Pie, PieChart } from 'recharts'
 
-type Props = {}
 
 const Row3 = () => {
   
@@ -17,7 +16,8 @@ const Row3 = () => {
   const { data: BestSellers } = useGetBestSellersAllQuery();
   const { data: mostBuyingCustomers } = useGetMostBuyingCustomersQuery();
   const { data: mostSellersCountry } = useGetMostSellersCountryQuery();
-  const { data: totalRevenue } = useGetTotalRevenueQuery();
+  const totalRevenueData = useGetTotalRevenueQuery().data;
+  const totalRevenue = typeof totalRevenueData === 'number' ? totalRevenueData : 0;
   
   const pieColors = [palette.primary[300], palette.primary[700], palette.primary[800]];
   
@@ -51,7 +51,7 @@ const Row3 = () => {
 
 // setTarget
   const [target, setTarget] = useState(50000000);
-  const handleTargetSubmit = (value) => {
+  const handleTargetSubmit = (value: React.SetStateAction<number>) => {
     setTarget(value); // Yeni hedef ciroyu ayarla
   };
   const roundedTotalRevenue = Math.round(totalRevenue);
