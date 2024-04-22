@@ -97,7 +97,7 @@ const LoginPage = () => {
             fullWidth
            
             sx={{
-              backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+              backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabiliriz
               mb:"0.5rem"
             }}
             
@@ -111,14 +111,14 @@ const LoginPage = () => {
             fullWidth
             
             sx={{
-              backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+              backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabiliriz
               mb: "2rem,"
             }}
           />
           <Button  variant="contained" color="primary" type="submit"  sx={{
                 mt: "1rem",
                 backgroundColor: palette.tertiary[500],
-                color: palette.background,
+                color: palette.primary.main,
                 "&:hover": { color: palette.primary.main },
               }}>
             Giriş

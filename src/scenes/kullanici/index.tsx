@@ -68,7 +68,9 @@ const gridTemplateSmallScreens = `
   "content"
 `;
 
-  const [setPageType] = useState("register");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [pageType, setPageType] = useState<string>("register");
+
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const handleDeleteUser = async (values: { userEmail: unknown; }) => {
@@ -108,7 +110,7 @@ const gridTemplateSmallScreens = `
         lastName: values.lastName,
         email: values.email,
         password: values.password,
-        // Diğer form alanlarına göre buraya ekleme yapabilirsiniz
+
       };
       
       const savedUserResponse = await fetch(
@@ -228,7 +230,7 @@ const gridTemplateSmallScreens = `
                 onChange={handleChange}
                 fullWidth
                 sx={{
-                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  backgroundColor: palette.primary[800],
                   mb: "2rem,",
                   borderRadius:"5px",
                 }}
@@ -243,7 +245,7 @@ const gridTemplateSmallScreens = `
                 onChange={handleChange}
                 fullWidth
                 sx={{
-                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  backgroundColor: palette.primary[800],
                   mb: "2rem,",
                   borderRadius:"5px",
                 }}
@@ -258,7 +260,7 @@ const gridTemplateSmallScreens = `
                 onChange={handleChange}
                 fullWidth
                 sx={{
-                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  backgroundColor: palette.primary[800],
                   mb: "2rem,",
                   borderRadius:"5px",
                 }}
@@ -273,7 +275,7 @@ const gridTemplateSmallScreens = `
                 onChange={handleChange}
                 fullWidth
                 sx={{
-                  backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+                  backgroundColor: palette.primary[800],
                   mb: "2rem,",
                   borderRadius:"5px",
                   
@@ -282,7 +284,6 @@ const gridTemplateSmallScreens = `
             </div>
           </Box>
 
-          {/* Butonlar */}
           <Box>
             <Button
               
@@ -387,7 +388,7 @@ const gridTemplateSmallScreens = `
           
           
           sx={{
-            backgroundColor: palette.primary[800], // Arka plan rengini buradan ayarlayabilirsiniz
+            backgroundColor: palette.primary[800],
             m: "2rem",
             borderRadius:"5px",
             width:"60%",
@@ -409,7 +410,7 @@ const gridTemplateSmallScreens = `
           {'SİL'}
         </Button>
         <Typography
-          onClick={() => handleDeleteUser(values)} // Eğer handleDeleteUser fonksiyonuna bir parametre gerekiyorsa values olarak kabul ediyorum.
+          onClick={() => handleDeleteUser(values)}
           sx={{
             textDecoration: 'underline',
             color: palette.primary[200],

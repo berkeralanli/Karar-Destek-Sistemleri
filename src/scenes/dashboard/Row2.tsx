@@ -206,8 +206,8 @@ const Row1 = () => {
 
           <Typography variant="h5"> Gelir Değişimi</Typography>
           <Typography m="0.5rem 0 " variant="h3" color={palette.primary[300]}>{`${increase}%`}</Typography>
-          <Typography variant="h6">2023 Cirosu: ₺{totalRevenue2023?.toLocaleString("tr-TR")}.</Typography>
-          <Typography m="0.5rem 0"variant="h6">2022 Cirosu: ₺{totalRevenue2022?.toLocaleString("tr-TR")}.</Typography>
+          <Typography variant="h6">2023 Cirosu: ₺{totalRevenue2023?.toLocaleString()}.</Typography>
+          <Typography m="0.5rem 0"variant="h6">2022 Cirosu: ₺{totalRevenue2022?.toLocaleString()}.</Typography>
          
         </Box>
         <PieChart 
@@ -237,8 +237,8 @@ const Row1 = () => {
         <Box ml="-0.8rem"  flexBasis={"40%"} textAlign={"center"}>
         <Typography variant="h5"> Satış Miktarı Değişimi</Typography>
           <Typography m="0.5rem 0 " variant="h3" color={palette.primary[300]}>{`${increaseTotalQuantity}%`}</Typography>
-          <Typography variant="h6">2023 Miktarı: {totalQuantity2023?.toLocaleString("tr-TR")}.</Typography>
-          <Typography m="0.5rem 0"variant="h6">2022 Miktarı: {totalQuantity2022?.toLocaleString("tr-TR")}.</Typography>
+          <Typography variant="h6">2023 Miktarı: {totalQuantity2023?.toLocaleString()}.</Typography>
+          <Typography m="0.5rem 0"variant="h6">2022 Miktarı: {totalQuantity2022?.toLocaleString()}.</Typography>
 
         </Box>
         
