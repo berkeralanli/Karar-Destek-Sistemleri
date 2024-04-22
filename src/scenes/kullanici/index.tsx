@@ -68,9 +68,7 @@ const gridTemplateSmallScreens = `
   "content"
 `;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pageType, setPageType] = useState<string>("register");
-
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const handleDeleteUser = async (values: { userEmail: unknown; }) => {
@@ -185,6 +183,7 @@ const gridTemplateSmallScreens = `
     ml="0rem"
     overflow="hidden">
        <Typography fontWeight="bold" fontSize="32px" color={palette.grey[400]} textAlign="center" mb="0.3rem">
+          {pageType === 'register' ? 'Yönetici Ekleme Paneli' : ''}
           Yönetici Ekleme Paneli
         </Typography>
         <Typography fontWeight="italic" fontSize="11px" color={palette.grey[700]} textAlign="center" >
