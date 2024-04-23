@@ -67,7 +67,7 @@ const gridTemplateSmallScreens = `
   "content"
   "content"
 `;
-    // eslint-disable-next-line no-unused-vars
+
   const [pageType, setPageType] = useState<string>("register");
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
