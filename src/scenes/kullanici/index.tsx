@@ -200,6 +200,7 @@ const gridTemplateSmallScreens = `
       
       "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
     }}> 
+    // eslint-disable-next-line no-unused-vars
     <Formik
       onSubmit={register}
       initialValues={initialValuesRegister}
