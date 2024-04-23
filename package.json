@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "eslint --no-verify && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
