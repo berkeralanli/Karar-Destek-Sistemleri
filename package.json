@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "eslint --no-verify && tsc && vite build",
+    "build": "eslint --no-error-on-unmatched-pattern --ext .js,.jsx,.ts,.tsx . && tsc && vite build"
+    ,
     "preview": "vite preview"
   },
   "dependencies": {
