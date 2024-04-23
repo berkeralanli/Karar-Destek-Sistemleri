@@ -67,13 +67,13 @@ const gridTemplateSmallScreens = `
   "content"
   "content"
 `;
-
+    // eslint-disable-next-line no-unused-vars
   const [pageType, setPageType] = useState<string>("register");
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const handleDeleteUser = async (values: { userEmail: unknown; }) => {
     try {
-      // Burada inputtan alınan e-posta adresini state üzerinden alabilirsin
+
       const userEmail = values.userEmail;
   
       const deletedUserResponse = await fetch(
